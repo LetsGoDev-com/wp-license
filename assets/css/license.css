@@ -1,0 +1,92 @@
+#letsgodev_box_license {
+	margin: auto;
+	position: fixed;
+	top: 0; left: 0; bottom: 0; right: 0;
+	background-color: #FFFFFF;
+	width: 300px;
+	height: fit-content;
+	border: 2px solid #DDD;
+	padding: 20px;
+	border-radius: 8px;
+}
+
+#letsgodev_box_license h2 {
+	text-align: center;
+	font-size: 25px;
+}
+
+#letsgodev_box_close {
+	text-decoration: none;
+	position: absolute;
+	right: 15px;
+	top: 10px;
+}
+
+#letsgodev_box_close::before {
+	content: "\f153";
+	font: 400 16px/20px dashicons;
+	display: block;
+	float: left;
+	margin-right: 3px;
+}
+
+#letsgodev_box_content {
+	text-align: center;
+}
+
+#letsgodev_box_message.success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+	position: relative;
+	padding: .75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
+#letsgodev_box_message.warning {
+	color: #856404;
+	background-color: #fff3cd;
+	border-color: #ffeeba;
+	position: relative;
+	padding: .75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
+#letsgodev_box_message.error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+	position: relative;
+	padding: .75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
+#letsgodev_button_unassign {
+	color: #fff;
+	background-color: #c82333;
+	border-color: #bd2130;
+	text-decoration: none;
+	-webkit-appearance: button;
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	cursor: pointer;
+}
+
+#letsgodev_box_link {
+	margin: 10px 0;
+}

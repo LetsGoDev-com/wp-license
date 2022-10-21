@@ -1,0 +1,129 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Letsgodev License\n"
+"POT-Creation-Date: 2022-03-16 02:12-0300\n"
+"PO-Revision-Date: 2022-03-16 02:13-0300\n"
+"Last-Translator: \n"
+"Language-Team: Letsgodev\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-letsgodev-license.php:28
+msgid "Wrong information"
+msgstr "Mala información"
+
+#: class-letsgodev-license.php:79
+msgid "Manager Licenses"
+msgstr "Administrar Licencias"
+
+#: class-letsgodev-license.php:203 class-letsgodev-license.php:213
+#: class-letsgodev-license.php:691
+msgid "There was a problem checking the license"
+msgstr "Hubo un problema revisando la licencia"
+
+#: class-letsgodev-license.php:221 class-letsgodev-license.php:229
+#: class-letsgodev-license.php:312 class-letsgodev-license.php:318
+#: class-letsgodev-license.php:613 class-letsgodev-license.php:700
+msgid "There was a problem establishing a connection to the API server"
+msgstr "Hubo un problema  estableciendo una conexión con el servidor API"
+
+#: class-letsgodev-license.php:256
+msgid "Server is down right. An email was sent to "
+msgstr "Servidor está caído. Un email fue enviado a "
+
+#: class-letsgodev-license.php:259
+#, php-format
+msgid "Letsgodev is down right (from %s) - Activating"
+msgstr "Letsgodev está caído ( from %s ) - Activando"
+
+#: class-letsgodev-license.php:299 class-letsgodev-license.php:305
+msgid "There was a problem activating the license"
+msgstr "Hubo un problema activando la licencia"
+
+#: class-letsgodev-license.php:481
+msgid "An error occour when try to identify the plugin."
+msgstr "Un error ocurrió cuando se intentaba identificar el plugin."
+
+#: class-letsgodev-license.php:481 class-letsgodev-license.php:488
+msgid "Try again"
+msgstr "Intenta otra vez"
+
+#: class-letsgodev-license.php:488
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "Un inesperado error HTTP ocurrió durante la respuesta de la API."
+
+#: class-letsgodev-license.php:537 class-letsgodev-license.php:639
+msgid "The license is missing"
+msgstr "No hay licencia"
+
+#: class-letsgodev-license.php:557 class-letsgodev-license.php:659
+msgid "Letsgodev is down right"
+msgstr "Letsgodev está caído"
+
+#: class-letsgodev-license.php:575
+msgid "Licence key is active to this domain"
+msgstr "La licencia está activada para este dominio"
+
+#: class-letsgodev-license.php:581
+msgid "Licence key is unassigned"
+msgstr "La licencia está desvinculada"
+
+#: class-letsgodev-license.php:585 class-letsgodev-license.php:674
+msgid "Licence key is missing"
+msgstr "No hay licencia"
+
+#: class-letsgodev-license.php:601
+msgid ""
+"There was a problem checking the license. This license does not correspond "
+"to this website."
+msgstr ""
+"Hubo un problema revisando la licencia. Esta licencia no corresponde a esta "
+"website."
+
+#: class-letsgodev-license.php:671
+msgid "Licence key successfully unassigned"
+msgstr "La licencia fue satisfactoriamente desvinculada"
+
+#: class-letsgodev-license.php:749
+msgid "Unassign from this website"
+msgstr "Desvincular desde este dominio"
+
+#: layouts/html-box-license.php:6
+msgid "Please enter your license code"
+msgstr "Por favor ingresa tu código de licencia"
+
+#: layouts/html-box-license.php:19
+msgid "License Code"
+msgstr "Código de Licencia"
+
+#: layouts/html-box-license.php:21
+msgid "Submit"
+msgstr "Envíar"
+
+#: layouts/html-box-license.php:25 layouts/html-popup-license.php:12
+msgid "Where do I find my License Code?"
+msgstr "Dónde encuentro mi código de licencia?"
+
+#: layouts/html-box-license.php:26 layouts/html-popup-license.php:16
+msgid "Manager License from your site"
+msgstr "Administrar licencia desde tu sitio"
+
+#: layouts/html-expire-license.php:7
+#, php-format
+msgid "Your license expired, please go to %s to renew it"
+msgstr "Tu licencia ha expirado, por favor ir a %s para renovarlo"
+
+#: layouts/html-popup-license.php:2
+msgid "Close Popup"
+msgstr "Cerrar Popup"
+
+#: layouts/html-popup-license.php:3
+msgid "License Status"
+msgstr "Estado de la licencia"
