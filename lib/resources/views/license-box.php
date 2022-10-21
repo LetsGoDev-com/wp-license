@@ -6,11 +6,8 @@
 		<?php echo esc_html__( 'Please enter your license code', 'letsgodev' ); ?>
 	</div>
 
-	<?php if ( !empty( $is_error ) ) : ?>
-		<div style="margin-bottom: 0.6em; font-size: 13px; color: red;">
-			<?php echo $error_msg; ?>
-		</div>
-		<code><?php print_r($error_desc); ?></code>
+	<?php if ( ! empty( $error ) ) : ?>
+		<code><?php echo $error; ?></code>
 	<?php endif; ?>
 
 
