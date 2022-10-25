@@ -15,10 +15,10 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"LetsGoDev\\Core\\": "lib",
-			"LetsGoDev\\Clases\\": "lib/app/Clases",
-			"LetsGoDev\\Controllers\\": "lib/app/Controllers",
-			"LetsGoDev\\Modules\\": "lib/app/Modules"
+			"LetsGoDev\\Core\\": "app",
+			"LetsGoDev\\Classes\\": "app/Classes",
+			"LetsGoDev\\Controllers\\": "app/Controllers",
+			"LetsGoDev\\Modules\\": "app/Modules"
 		}
 	}
 }

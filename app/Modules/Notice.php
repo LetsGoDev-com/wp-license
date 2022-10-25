@@ -22,7 +22,7 @@ class Notice extends Module {
 	 * Init Hooks
 	 * @return mixed
 	 */
-	function iniHooks() {
+	public function iniHooks() {
 		// Activating license
 		add_action( 'admin_init', [ $this, 'activateLicense' ] );
 
@@ -45,11 +45,11 @@ class Notice extends Module {
 			return;
 		}
 
-		$name 	= $this->setting->name;
-		$slug 	= $this->setting->slug;
+		$name 	= $this->settings->name;
+		$slug 	= $this->settings->slug;
 		$error 	= $this->notice ?: '';
 
-		include LETSGO_LICENSE_PATH . 'resources/views/license-box.php';
+		include $this->settings->dir . 'resources/views/license-box.php';
 	}
 
 
@@ -66,10 +66,10 @@ class Notice extends Module {
 		// Get License Info
 		$licensedates = get_option( $this->settings->slug . '_license_dates', [] );
 
-		$name 	= $this->setting->name;
+		$name 	= $this->settings->name;
 		$expire = $licensedates['expire'] ?? '';
 
-		include LETSGO_LICENSE_PATH . 'resources/views/license-expired.php';
+		include $this->settings->dir . 'resources/views/license-expired.php';
 	}
 
 
@@ -78,7 +78,7 @@ class Notice extends Module {
 	 * @param  string $license_key
 	 * @return mixed
 	 */
-	private function activateLicense() {
+	public function activateLicense() {
 
 		// Check if the license key was sent by POST
 		if( ! isset( $_POST[ $this->settings->slug . '_license_key' ] ) ) {

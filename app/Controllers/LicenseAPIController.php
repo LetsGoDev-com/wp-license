@@ -59,6 +59,10 @@ Class LicenseAPIController {
 	}
 
 
+	/**
+	 * CheckLicense
+	 * @return mixed
+	 */
 	public function checkLicense() {
 
 		// Check License
@@ -95,8 +99,6 @@ Class LicenseAPIController {
 	public function isExpired() {
 		return get_transient( $this->settings->slug . '_license_expired' );
 	}
-
-
 
 
 	/**
@@ -207,7 +209,7 @@ Class LicenseAPIController {
 	 * @param  string $action
 	 * @return array
 	 */
-	private function processRequest( string $action, string $licenseKey ) {
+	private function processRequest( string $action, string $licenseKey = '' ) {
 		global $wp_version;
 
 		// Get License

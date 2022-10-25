@@ -21,7 +21,7 @@ class Popup extends Module {
 	 * Init Hooks
 	 * @return mixed
 	 */
-	function iniHooks() {
+	public function iniHooks() {
 		
 		// Plugin Info Links
 		$linksHook = sprintf( 'plugin_action_links_%s', $this->settings->plugin );
@@ -188,7 +188,6 @@ class Popup extends Module {
 			] );
 		}
 		
-
 		wp_send_json_success( [
 			'box_class'		=> 'success',
 			'box_message'	=> esc_html__( 'The license key was successfully unlinked', 'letsgodev' ),
@@ -206,7 +205,7 @@ class Popup extends Module {
 		if( ! is_admin() || ! isset( $screen->base ) || 'plugins' != $screen->base )
 			return;
 
-		include_once LETSGO_LICENSE_PATH . 'resources/views/popup.php';
+		include $this->settings->dir . 'resources/views/popup.php';
 	}
 
 

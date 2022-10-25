@@ -37,7 +37,7 @@ class i18n extends Module {
 		\load_plugin_textdomain(
 			'letsgodev',
 			false,
-			$this->settings->base . '/lib/resources/languages/'
+			$this->settings->base . 'resources/languages/'
 		);
 	}
 }

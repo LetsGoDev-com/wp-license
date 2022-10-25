@@ -1,6 +1,8 @@
 <?php
 namespace LetsGoDev\Classes;
 
+use LetsGoDev\Controllers\LicenseAPIController;
+
 /**
  * Modules
  *
@@ -26,8 +28,8 @@ abstract class Module {
 	 * Class Construct
 	 * @param array $settings
 	 */
-	public function __construct( array $settings = [] ) {
-		$this->settings = (object)$settings;
+	public function __construct( $settings ) {
+		$this->settings = $settings;
 	}
 	
 	/**

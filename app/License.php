@@ -16,18 +16,18 @@ class License {
 
 	protected $slug;
 	protected $plugin;
-	protected $base;
 	protected $name;
-	
-	protected $error_title;
-	protected $error_desc;
-	protected $is_active = false;
-	protected $transient_hours = 24;
 
+	protected $dir;
+	protected $url;
+	protected $base;
+	
+	public $api;
 
 	protected $modules = [
 		'i18n',
 		'Notice',
+		'Links',
 		'Popup',
 		'Upgrade',
 	];
@@ -38,17 +38,18 @@ class License {
 	 */
 	function __construct( $data = [] ) {
 
-		if( ! isset( $data['name'] ) || ! isset( $data['base'] ) )
-			throw new Exception( esc_html__( 'Wrong information', 'letsgodev' ) );
-
+		// Plugin Info
 		$this->name 	= $data['name'] ?? '';
 		$this->plugin 	= $data['plugin'] ?? '';
 		$this->slug 	= dirname( $this->plugin );
-
-		$this->base 	= $data['library_base'] ?? '';
-		//$this->dir 		= $data['library_dir'] ?? '';
 		$this->doc 		= $data['doc'] ?? '';
 
+		// Plugin Path
+		$this->dir 		= plugin_dir_path(__DIR__);
+		$this->url 		= plugin_dir_url( __DIR__ );
+		$this->base 	= dirname( plugin_basename( __DIR__ ) );
+
+		// Api Info
 		$this->api_url 	= $data['api_url'] ?? '';
 		$this->product 	= $data['product'] ?? '';
 		$this->domain 	= $data['domain'] ?? '';
@@ -57,26 +58,35 @@ class License {
 		$this->email 	= $data['email'] ?? '';
 		$this->redirect = $data['redirect'] ?? '';
 
-
+		// Register Modules
 		$this->registerModules();
 	}
 
 
 	/**
-	 * Define Constant
+	 * Magic Getter
+	 * @param  string $name
 	 * @return mixed
 	 */
-	public function defineConstant() {
-
-		if( ! defined( 'LETSGO_LICENSE_PATH' ) ) {
-			define( 'LETSGO_LICENSE_PATH', dirname( __FILE__ ) );
-		}
-
-		define('LETSGO_LICENSE_DIR' , plugin_dir_path(__FILE__));
-		define('LETSGO_LICENSE_URL' , plugin_dir_url(__FILE__));
-		define('LETSGO_LICENSE_BASE' , plugin_basename( __FILE__ ));
-		
+	public function __get( string $name ) {
+		return $this->{$name} ?? null;
 	}
+
+
+	/**
+	 * Cloning is forbidden.
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
+	}
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	public function __wakeup() {
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
+	}
+
 
 	/**
 	 * Register Modules
@@ -93,8 +103,33 @@ class License {
 				continue;
 			}
 
+			// Instance Module
 			$moduleApp = new $moduleClass( $this );
 			$moduleApp->run();
+
+			// Set API
+			if( empty( $this->api ) ) {
+				$this->api = $moduleApp->api();
+			}
 		}
 	}
+
+
+	/**
+	 * Has License
+	 * @return boolean
+	 */
+	public function hasLicense() {
+		return $this->api->hasLicense();
+	}
+
+
+	/**
+	 * is Active
+	 * @return boolean
+	 */
+	public function isActive() {
+		return $this->api->isActive();
+	}
+
 }
