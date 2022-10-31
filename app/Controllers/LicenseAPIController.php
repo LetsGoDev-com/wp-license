@@ -1,6 +1,8 @@
 <?php
 namespace LetsGoDev\Controllers;
 
+use LetsGoDev\Classes\Logger;
+
 /**
  * LicenseApi Class
  *
@@ -13,6 +15,13 @@ namespace LetsGoDev\Controllers;
  */
 
 Class LicenseAPIController {
+
+
+	/**
+	 * Results for each API call
+	 * @var array
+	 */
+	protected $results = [];
 
 	/**
 	 * Construct
@@ -35,6 +44,7 @@ Class LicenseAPIController {
 		// If empty license key
 		if( empty( $licenseKey ) ) {
 			\delete_transient( $this->settings->slug . '_has_license');
+			\delete_transient( $this->settings->slug . '_license_expired' );
 			return false;
 		}
 
@@ -47,15 +57,15 @@ Class LicenseAPIController {
 		$response = $this->processRequest( 'status-check', $licenseKey );
 
 		// Process Response
-		$result = $this->processResponse( $response, [ 's205', 's215' ], true );
+		$isSuccess = $this->processResponse( $response, [ 's205', 's215' ], true );
 
-		
 		// If false, remove license
-		if( ! $result['success'] ) {
-			delete_option( $this->settings->slug . '_license' );
+		if( ! $isSuccess ) {
+			\delete_option( $this->settings->slug . '_license' );
+			\delete_transient( $this->settings->slug . '_license_expired' );
 		}
 
-		return $result['success'];
+		return $isSuccess;
 	}
 
 
@@ -112,16 +122,25 @@ Class LicenseAPIController {
 
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
-			return [
-				'success' 	=> false,
-				'data' 		=> [ 'error' => $response->get_error_message() ]
+
+			$this->result = [
+				'error'	=> $response->get_error_message(),
+				'data'	=> [
+					'body'	=> []
+				]
 			];
+
+			return false;
 		}
 
-		return [
-			'success' 	=> true,
-			'data' 		=> [ 'body' => \wp_remote_retrieve_body( $response ) ]
+		$this->result = [
+			'error'	=> '',
+			'data'	=> [
+				'body'	=> \wp_remote_retrieve_body( $response )
+			]
 		];
+
+		return true;
 	}
 
 
@@ -141,16 +160,26 @@ Class LicenseAPIController {
 
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
-			return [
-				'success' 	=> false,
-				'data' 		=> [ 'error' => $response->get_error_message() ]
+
+			$this->result = [
+				'error'	=> $response->get_error_message(),
+				'data'	=> [
+					'body'	=> []
+				]
 			];
+
+			return false;
 		}
 
-		return [
-			'success' 	=> true,
-			'data' 		=> [ 'body' => \wp_remote_retrieve_body( $response ) ]
+
+		$this->result = [
+			'error'	=> '',
+			'data'	=> [
+				'body'	=> \wp_remote_retrieve_body( $response )
+			]
 		];
+
+		return true;
 	}
 
 
@@ -165,13 +194,13 @@ Class LicenseAPIController {
 		$response = $this->processRequest( 'activate', $licenseKey );
 
 		// Process the response
-		$result = $this->processResponse( $response, [ 's100', 's101' ] );
+		$isSuccess = $this->processResponse( $response, [ 's100', 's101' ] );
 
-		if( $result['success'] ) {
+		if( $isSuccess ) {
 			update_option( $this->settings->slug . '_license', $licenseKey );
 		}
 
-		return $result;
+		return $isSuccess;
 	}
 
 
@@ -191,16 +220,16 @@ Class LicenseAPIController {
 		$response = $this->processRequest( 'deactivate', $licenseKey );
 
 		// Process Response
-		$result = $this->processResponse( $response, [ 's201' ] );
+		$isSuccess = $this->processResponse( $response, [ 's201' ] );
 
-		if( $result['success'] ) {
+		if( $isSuccess ) {
 			delete_option( $this->settings->slug . '_license' );
-			delete_option( $this->settings->slug . '_license_dates' );
+			//delete_option( $this->settings->slug . '_license_dates' );
 			delete_transient( $this->settings->slug . '_has_license' );
 			delete_transient( $this->settings->slug . '_license_expired' );
 		}
 
-		return $result;
+		return $isSuccess;
 	}
 
 
@@ -251,11 +280,18 @@ Class LicenseAPIController {
 		// If server is down
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			// Logger
-			$message = \esc_html__( 'Server is down right', 'letsgodev' );
-			$message.= "\n" . print_r( $response->get_error_message(), true );
+			$this->result = [
+				'error'		=> \esc_html__( 'Server is down right', 'letsgodev' ),
+				'data'		=> [
+					'response'	=> $response->get_error_message(),
+					'api_url'	=> $this->settings->api_url,
+					'product'	=> $this->settings->product,
+					'domain'	=> $this->settings->domain,
+					'version'	=> $this->settings->version,
+				]
+			];
 
-			Logger::message( $message );
+			Logger::message( $this->result );
 
 			// If is down server, to convert to true
 			if( $isDownServer ) {
@@ -264,16 +300,10 @@ Class LicenseAPIController {
 					1, WEEK_IN_SECONDS
 				);
 
-				return [
-					'success'   => true,
-					'data'      => [],
-				];
+				return true;
 			}
 
-			return [
-				'success'   => false,
-				'data'      => [ 'error' => $response->get_error_message() ],
-			];
+			return false;
 		}
 
 		// Receive Body
@@ -284,31 +314,59 @@ Class LicenseAPIController {
 
 
 		// If there is a problem establishing a connection
-		if( empty( $body->status ) || $body->status != 'success' ) {
+		if( empty( $body->status ) ) {
 
-			$message = \esc_html__( 'There was a problem establishing a connection to the API server', 'letsgodev' );
+			$this->result = [
+				'error'		=> \esc_html__( 'There was a problem establishing a connection to the API server', 'letsgodev' ),
+				'data'		=> [
+					'api_url'	=> $this->settings->api_url,
+					'product'	=> $this->settings->product,
+					'domain'	=> $this->settings->domain,
+					'version'	=> $this->settings->version,
+					'body'		=> $body,
+				]
+			];
 
-			Logger::message( $message );
+			Logger::message( $this->result );
 
 			// IF success
-			return [
-				'success'   => false,
-				'data'      => [ 'error' => $message ],
-			];
+			return false;
 		}
 
-		// If there is no a status code
-		if( ! empty( $allowedCodes ) && ! in_array( $body->status_code, $allowedCodes ) ) {
+		// If Error
+		if( $body->status != 'success' ) {
 
-			$message = \esc_html__( 'Status Code no allowed', 'letsgodev' );
-			Logger::message( $message );
+			$this->result = [
+				'error'	=> $body->message ?? '',
+				'data'	=> [
+					'code'	=> $body->status_code ?? '',
+					'body'	=> $body,
+				]
+			];
+			
+			Logger::message( $this->result );
 
 			// IF success
-			return [
-				'success'   => false,
-				'data'      => [ 'error' => $message ],
+			return false;
+
+		} elseif( ! empty( $allowedCodes ) && ! in_array( $body->status_code, $allowedCodes ) ) {
+
+			$this->result = [
+				'error'		=> $body->message ?? '',
+				'data'		=> [
+					'response'	=> \esc_html__( 'Status Code no allowed', 'letsgodev' ),
+					'allowed'	=> $allowedCodes,
+					'code'		=> $body->status_code ?? '',
+					'body'		=> $body,
+				]
 			];
+			
+			Logger::message( $this->result );
+
+			// IF success
+			return false;
 		}
+
 
 		// set "has license"
 		\set_transient( $this->settings->slug . '_has_license', 1, WEEK_IN_SECONDS );
@@ -340,11 +398,24 @@ Class LicenseAPIController {
 		//	wp_safe_redirect( $this->redirect );
 		//	exit;
 		//}
+		
+		$this->result = [
+			'error'	=> '',
+			'data'	=> [
+				'code'	=> $body->status_code,
+			],
+		];
 
 		
-		return [
-			'success' 	=> true,
-			'data'		=> [ 'body' => $body, 'code' => $body->status_code ]
-		];
+		return true;
+	}
+
+
+	/**
+	 * Get Results from API Call
+	 * @return array
+	 */
+	public function getLastResult() {
+		return $this->result;
 	}
 }

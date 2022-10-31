@@ -20,13 +20,15 @@ class Logger {
 	 */
 	public static function message( $message, $var_dump = false ) {
 
-		if( \apply_filters( __NAMESPACE__ . '/enable', false ) ) {
+		if( ! \apply_filters( wp_normalize_path( __CLASS__ ) . '/enable', false ) ) {
 			return;
 		}
 
 		self::createDir();
 
 		$date = sprintf( '[ %s ]', date('d-M-Y H:i:s e') );
+
+		error_log( "--------------- Begin of Message ---------------" . "\n", 3, self::destination() );
 
 		if ( is_array( $message ) || is_object( $message ) ) {
 			error_log( $date . print_r( $message, true ), 3, self::destination()  );
@@ -42,6 +44,9 @@ class Logger {
 				error_log( $date . $message . "\n", 3, self::destination() );
 			}
 		}
+
+
+		error_log( "--------------- End of Message ---------------" . "\n", 3, self::destination() );
 	}
 
 

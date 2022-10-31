@@ -49,14 +49,17 @@ class Upgrade extends Module {
             return $checkedData;
 
         // Check update
-        $response = $this->api()->checkUpdate();
+        $isChecked = $this->api()->checkUpdate();
+
+        // Get Results
+        $result = $this->api()->getLastResult();
         
         // If error
-        if( ! $response['success'] ) {
+        if( ! $isChecked ) {
             return $checkedData;
         }
 
-        $responseBlock = json_decode( $response[ 'data' ][ 'body' ] );
+        $responseBlock = json_decode( $result[ 'data' ][ 'body' ] );
  
         if( ! is_array( $responseBlock ) || count( $responseBlock ) < 1 )
             return $checkedData;
@@ -116,14 +119,17 @@ class Upgrade extends Module {
             return $def;
 
         // Plugin_information from the API
-        $response = $this->api()->getInfo();
+        $isInfo = $this->api()->getInfo();
+
+        // Get Results
+        $result = $this->api()->getLastResult();
 
         // If error
-        if( ! $response[ 'success' ] ) {
-            return new WP_Error('plugins_api_failed', esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $response[ 'data' ][ 'error' ]);
+        if( ! $isInfo ) {
+            return new WP_Error('plugins_api_failed', esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
         }
 
-        $responseBlock = json_decode( $response[ 'data' ][ 'body' ] );
+        $responseBlock = json_decode( $result[ 'data' ][ 'body' ] );
         
         //retrieve the last message within the $responseBlock
         $responseBlock = $responseBlock[ count($responseBlock) - 1 ];

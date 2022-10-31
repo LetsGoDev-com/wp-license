@@ -25,6 +25,13 @@ abstract class Module {
 
 
 	/**
+	 * Api Controller
+	 * @var null
+	 */
+	protected $api = null;
+
+
+	/**
 	 * Class Construct
 	 * @param array $settings
 	 */

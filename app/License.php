@@ -43,20 +43,18 @@ class License {
 		$this->plugin 	= $data['plugin'] ?? '';
 		$this->slug 	= dirname( $this->plugin );
 		$this->doc 		= $data['doc'] ?? '';
+		$this->redirect = $data['redirect'] ?? '';
 
 		// Plugin Path
-		$this->dir 		= plugin_dir_path(__DIR__);
-		$this->url 		= plugin_dir_url( __DIR__ );
-		$this->base 	= dirname( plugin_basename( __DIR__ ) );
+		$this->dir 		= trailingslashit( plugin_dir_path(__DIR__) );
+		$this->url 		= trailingslashit( plugin_dir_url( __DIR__ ) );
+		$this->base 	= trailingslashit( dirname( plugin_basename( __DIR__ ) ) );
 
 		// Api Info
 		$this->api_url 	= $data['api_url'] ?? '';
 		$this->product 	= $data['product'] ?? '';
 		$this->domain 	= $data['domain'] ?? '';
 		$this->version 	= $data['version'] ?? '';
-
-		$this->email 	= $data['email'] ?? '';
-		$this->redirect = $data['redirect'] ?? '';
 
 		// Register Modules
 		$this->registerModules();

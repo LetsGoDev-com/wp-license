@@ -127,18 +127,21 @@ class Popup extends Module {
         	die ( 'Busted!');
 		
 		// Check the license
-		$checkLicense = $this->api()->checkLicense();
+		$isChecked = $this->api()->checkLicense();
 
-		if( ! $checkLicense[ 'success' ] ) {
+		// Result from check the license
+		$result = $this->api()->getLastResult();
+
+		if( ! $isChecked ) {
 			wp_send_json_error( [
 				'isactive'	=> 0,
 				'class'		=> 'error',
-				'message'	=> $checkLicense['data']['error'],
+				'message'	=> $result['error'] ?? '',
 			] );
 		}
 
 		// Check the status code
-		switch( $checkLicense['data']['code'] ) {
+		switch( $result['data']['code'] ) {
 			
 			case 's205' :
 			case 's215' :
@@ -179,12 +182,15 @@ class Popup extends Module {
 
 
         // Check the license
-		$deactivateLicense = $this->api()->deactivate();
+		$isDeactivated = $this->api()->deactivate();
 
-		if( ! $deactivateLicense[ 'success' ] ) {
+		// Get last result
+		$result = $this->api()->getLastResult();
+
+		if( ! $isDeactivated ) {
 			wp_send_json_error( [
 				'box_class'		=> 'error',
-				'box_message'	=> $deactivateLicense['data']['error'],
+				'box_message'	=> $result['error'] ?? '',
 			] );
 		}
 		

@@ -45,9 +45,19 @@ class Notice extends Module {
 			return;
 		}
 
+		$result = $this->api()->getLastResult();
+
 		$name 	= $this->settings->name;
 		$slug 	= $this->settings->slug;
-		$error 	= $this->notice ?: '';
+
+		// If there is an error
+		if( ! empty( $result['error'] ) ) {
+			
+			$error = print_r( [
+				'error'	=> $result['error'],
+				'code'	=> $result['data']['code'] ?? ''
+			], true );
+		}
 
 		include $this->settings->dir . 'resources/views/license-box.php';
 	}
@@ -89,12 +99,14 @@ class Notice extends Module {
 		$licenseKey = esc_html( $_POST[ $this->settings->slug . '_license_key' ] );
 		
 		// Activating License
-		$result = $this->api()->activate( $licenseKey );
+		$isActivated = $this->api()->activate( $licenseKey );
 
-		if( ! $result['success'] ) {
-			$this->notice = $result['data']['error'];
+		// If there is a redirect
+		if( $isActivated && ! empty( $this->settings->redirect ) ) {
+			wp_redirect( $this->settings->redirect );
+        	exit;
 		}
 		
-		return true;
+		return $isActivated;
 	}
 }

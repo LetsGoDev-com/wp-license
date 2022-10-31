@@ -1,4 +1,4 @@
-<div class="updated" style="display: block;">
+<div class="updated wplicense-notice" style="display: block;">
 
 	<h1><?php echo $name; ?></h1>
 
@@ -7,7 +7,7 @@
 	</div>
 
 	<?php if ( ! empty( $error ) ) : ?>
-		<code><?php echo $error; ?></code>
+		<code class="error"><?php echo $error; ?></code>
 	<?php endif; ?>
 
 
