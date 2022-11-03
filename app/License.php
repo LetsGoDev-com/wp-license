@@ -38,23 +38,27 @@ class License {
 	 */
 	function __construct( $data = [] ) {
 
+		$this->settings = new \stdClass();
+
 		// Plugin Info
-		$this->name 	= $data['name'] ?? '';
-		$this->plugin 	= $data['plugin'] ?? '';
-		$this->slug 	= dirname( $this->plugin );
-		$this->doc 		= $data['doc'] ?? '';
-		$this->redirect = $data['redirect'] ?? '';
+		$this->settings->name 	= $data['name'] ?? '';
+		$this->settings->plugin = $data['plugin'] ?? '';
+		$this->settings->slug 	= dirname( $this->settings->plugin );
+		$this->settings->doc 	= $data['doc'] ?? '';
 
 		// Plugin Path
-		$this->dir 		= trailingslashit( plugin_dir_path(__DIR__) );
-		$this->url 		= trailingslashit( plugin_dir_url( __DIR__ ) );
-		$this->base 	= trailingslashit( dirname( plugin_basename( __DIR__ ) ) );
+		$this->settings->dir 	= trailingslashit( plugin_dir_path(__DIR__) );
+		$this->settings->url 	= trailingslashit( plugin_dir_url( __DIR__ ) );
+		$this->settings->base 	= trailingslashit( dirname( plugin_basename( __DIR__ ) ) );
 
 		// Api Info
-		$this->api_url 	= $data['api_url'] ?? '';
-		$this->product 	= $data['product'] ?? '';
-		$this->domain 	= $data['domain'] ?? '';
-		$this->version 	= $data['version'] ?? '';
+		$this->settings->api_url 	= $data['api_url'] ?? '';
+		$this->settings->product 	= $data['product'] ?? '';
+		$this->settings->domain 	= $data['domain'] ?? '';
+		$this->settings->version 	= $data['version'] ?? '';
+
+		$this->settings->email 		= $data['email'] ?? '';
+		$this->settings->redirect 	= $data['redirect'] ?? '';
 
 		// Register Modules
 		$this->registerModules();
@@ -102,7 +106,7 @@ class License {
 			}
 
 			// Instance Module
-			$moduleApp = new $moduleClass( $this );
+			$moduleApp = new $moduleClass( $this->settings );
 			$moduleApp->run();
 
 			// Set API

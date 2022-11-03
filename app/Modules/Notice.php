@@ -31,9 +31,27 @@ class Notice extends Module {
 
 		// Alert message when the license expired
 		add_action( 'admin_notices', [ $this, 'printLicenseExpired' ] );
+
+		// Enqueue scripts for admin
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts'] );
 	}
 
-	
+
+	/**
+	 * Scripts on the admin
+	 * @return mixed
+	 */
+	public function enqueueScripts() {
+		$screen = get_current_screen();
+
+		wp_register_style(
+			'letsgodev-license-notice-css',
+			$this->settings->url . 'resources/assets/styles/License-Notice.css'
+		);
+
+		wp_enqueue_style( 'letsgodev-license-notice-css' );
+	}
+
 
 	/**
 	 * Box on the top to enter the license
@@ -45,18 +63,17 @@ class Notice extends Module {
 			return;
 		}
 
-		$result = $this->api()->getLastResult();
+		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		$name 	= $this->settings->name;
 		$slug 	= $this->settings->slug;
 
-		// If there is an error
+
 		if( ! empty( $result['error'] ) ) {
-			
 			$error = print_r( [
 				'error'	=> $result['error'],
-				'code'	=> $result['data']['code'] ?? ''
-			], true );
+				'code'	=> $result['data']['code'] ?? '',
+			], true);
 		}
 
 		include $this->settings->dir . 'resources/views/license-box.php';

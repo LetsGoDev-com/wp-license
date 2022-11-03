@@ -52,7 +52,7 @@ class Upgrade extends Module {
         $isChecked = $this->api()->checkUpdate();
 
         // Get Results
-        $result = $this->api()->getLastResult();
+        $result = $this->api()->getLastResult( $this->settings->slug );
         
         // If error
         if( ! $isChecked ) {
@@ -122,7 +122,7 @@ class Upgrade extends Module {
         $isInfo = $this->api()->getInfo();
 
         // Get Results
-        $result = $this->api()->getLastResult();
+        $result = $this->api()->getLastResult( $this->settings->slug );
 
         // If error
         if( ! $isInfo ) {

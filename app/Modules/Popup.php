@@ -79,22 +79,22 @@ class Popup extends Module {
 		$screen = get_current_screen();
 
 		// In plugin page
-		if ( ! is_admin() || ! isset( $screen->base ) || 'plugins' != $screen->base )
+		if ( ! isset( $screen->base ) || 'plugins' != $screen->base )
 			return;
 
 		wp_register_script(
-			'letsgodev-license-js',
+			'letsgodev-license-popup-js',
 			$this->settings->url . 'resources/assets/scripts/License.js',
 			[ 'jquery' ], false, true
 		);
 
 		wp_register_style(
-			'letsgodev-license-css',
+			'letsgodev-license-popup-css',
 			$this->settings->url . 'resources/assets/styles/License.css'
 		);
 
-		wp_enqueue_script( 'letsgodev-license-js' );
-		wp_enqueue_style( 'letsgodev-license-css' );
+		wp_enqueue_script( 'letsgodev-license-popup-js' );
+		wp_enqueue_style( 'letsgodev-license-popup-css' );
 
 		$loading_icon = admin_url( 'images/spinner-2x.gif' );
 
@@ -113,7 +113,7 @@ class Popup extends Module {
 			'refresh'		=> $refresh,
 		];
 
-		wp_localize_script( 'letsgodev-license-js', 'letsgo', $data );
+		wp_localize_script( 'letsgodev-license-popup-js', 'letsgo', $data );
 	}
 
 
@@ -130,7 +130,7 @@ class Popup extends Module {
 		$isChecked = $this->api()->checkLicense();
 
 		// Result from check the license
-		$result = $this->api()->getLastResult();
+		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		if( ! $isChecked ) {
 			wp_send_json_error( [
@@ -185,7 +185,7 @@ class Popup extends Module {
 		$isDeactivated = $this->api()->deactivate();
 
 		// Get last result
-		$result = $this->api()->getLastResult();
+		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		if( ! $isDeactivated ) {
 			wp_send_json_error( [

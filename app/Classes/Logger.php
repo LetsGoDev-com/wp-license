@@ -18,8 +18,9 @@ class Logger {
 	 * @access   public
 	 * @return   void
 	 */
-	public static function message( $message, $var_dump = false ) {
+	public static function message( array|string $message, string $slug ) {
 
+		// Save to Log File
 		if( ! \apply_filters( wp_normalize_path( __CLASS__ ) . '/enable', false ) ) {
 			return;
 		}
@@ -28,25 +29,17 @@ class Logger {
 
 		$date = sprintf( '[ %s ]', date('d-M-Y H:i:s e') );
 
-		error_log( "--------------- Begin of Message ---------------" . "\n", 3, self::destination() );
+		error_log( "--------------- Begin of Message ---------------" . "\n", 3, self::destination( $slug ) );
 
 		if ( is_array( $message ) || is_object( $message ) ) {
-			error_log( $date . print_r( $message, true ), 3, self::destination()  );
+			error_log( $date . print_r( $message, true ), 3, self::destination( $slug )  );
 
 		} else {
-			if ( $var_dump ) {
-				ob_start();
-				var_dump($message);
-				$result = ob_get_clean();
-				error_log( $date . $result, 3, self::destination() );
-
-			} else {
-				error_log( $date . $message . "\n", 3, self::destination() );
-			}
+			error_log( $date . $message . "\n", 3, self::destination( $slug ) );
 		}
 
 
-		error_log( "--------------- End of Message ---------------" . "\n", 3, self::destination() );
+		error_log( "--------------- End of Message ---------------" . "\n", 3, self::destination( $slug ) );
 	}
 
 
@@ -82,9 +75,17 @@ class Logger {
      * @access   private
      * @return   string
      */
-    private static function destination() {
-        $file = sprintf( 'debug_%s.log', date('Y_m_d') );
+    private static function destination( string $slug ) {
+        $file = sprintf(
+        	'debug_%s_%s.log',
+        	str_replace( '-', '_', $slug ),
+        	date( 'Y_m_d' )
+        );
+
         return self::dir() . $file;
     }
 
+
+
+    
 }

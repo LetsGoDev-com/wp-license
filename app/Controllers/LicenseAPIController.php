@@ -16,12 +16,11 @@ use LetsGoDev\Classes\Logger;
 
 Class LicenseAPIController {
 
-
 	/**
 	 * Results for each API call
 	 * @var array
 	 */
-	protected $results = [];
+	public static $result = [];
 
 	/**
 	 * Construct
@@ -123,7 +122,7 @@ Class LicenseAPIController {
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			$this->result = [
+			self::$result[ $this->settings->slug ] = [
 				'error'	=> $response->get_error_message(),
 				'data'	=> [
 					'body'	=> []
@@ -133,7 +132,7 @@ Class LicenseAPIController {
 			return false;
 		}
 
-		$this->result = [
+		self::$result[ $this->settings->slug ] = [
 			'error'	=> '',
 			'data'	=> [
 				'body'	=> \wp_remote_retrieve_body( $response )
@@ -161,7 +160,7 @@ Class LicenseAPIController {
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			$this->result = [
+			self::$result[ $this->settings->slug ] = [
 				'error'	=> $response->get_error_message(),
 				'data'	=> [
 					'body'	=> []
@@ -172,7 +171,7 @@ Class LicenseAPIController {
 		}
 
 
-		$this->result = [
+		self::$result[ $this->settings->slug ] = [
 			'error'	=> '',
 			'data'	=> [
 				'body'	=> \wp_remote_retrieve_body( $response )
@@ -280,7 +279,7 @@ Class LicenseAPIController {
 		// If server is down
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			$this->result = [
+			$result = [
 				'error'		=> \esc_html__( 'Server is down right', 'letsgodev' ),
 				'data'		=> [
 					'response'	=> $response->get_error_message(),
@@ -291,7 +290,11 @@ Class LicenseAPIController {
 				]
 			];
 
-			Logger::message( $this->result );
+			// Last Result
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
 
 			// If is down server, to convert to true
 			if( $isDownServer ) {
@@ -316,7 +319,7 @@ Class LicenseAPIController {
 		// If there is a problem establishing a connection
 		if( empty( $body->status ) ) {
 
-			$this->result = [
+			$result = [
 				'error'		=> \esc_html__( 'There was a problem establishing a connection to the API server', 'letsgodev' ),
 				'data'		=> [
 					'api_url'	=> $this->settings->api_url,
@@ -327,7 +330,11 @@ Class LicenseAPIController {
 				]
 			];
 
-			Logger::message( $this->result );
+			// LastResult
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
 
 			// IF success
 			return false;
@@ -336,7 +343,7 @@ Class LicenseAPIController {
 		// If Error
 		if( $body->status != 'success' ) {
 
-			$this->result = [
+			$result = [
 				'error'	=> $body->message ?? '',
 				'data'	=> [
 					'code'	=> $body->status_code ?? '',
@@ -344,14 +351,18 @@ Class LicenseAPIController {
 				]
 			];
 			
-			Logger::message( $this->result );
+			// LastResult
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
 
 			// IF success
 			return false;
 
 		} elseif( ! empty( $allowedCodes ) && ! in_array( $body->status_code, $allowedCodes ) ) {
 
-			$this->result = [
+			$result = [
 				'error'		=> $body->message ?? '',
 				'data'		=> [
 					'response'	=> \esc_html__( 'Status Code no allowed', 'letsgodev' ),
@@ -360,8 +371,11 @@ Class LicenseAPIController {
 					'body'		=> $body,
 				]
 			];
+
+			// LastResult
+			self::$result[ $this->settings->slug ] = $result;
 			
-			Logger::message( $this->result );
+			Logger::message( $result, $this->settings->slug );
 
 			// IF success
 			return false;
@@ -389,22 +403,16 @@ Class LicenseAPIController {
 			\set_transient( $this->settings->slug . '_license_expired', 1, WEEK_IN_SECONDS );
 		}
 
-		// Save License
-		//update_option( $this->settings->slug . '_license', $license_key );
-
-		// If redirect
-		//if( isset( $this->redirect ) && ! empty( $this->redirect ) ) {
-		//	set_transient( $this->slug . '_redirect', true, 30 );
-		//	wp_safe_redirect( $this->redirect );
-		//	exit;
-		//}
 		
-		$this->result = [
+		$result = [
 			'error'	=> '',
 			'data'	=> [
 				'code'	=> $body->status_code,
 			],
 		];
+
+		// LastResult
+		self::$result[ $this->settings->slug ] = $result;
 
 		
 		return true;
@@ -415,7 +423,7 @@ Class LicenseAPIController {
 	 * Get Results from API Call
 	 * @return array
 	 */
-	public function getLastResult() {
-		return $this->result;
+	public function getLastResult( string $slug ) {
+		return self::$result[ $slug ] ?? [];
 	}
 }
