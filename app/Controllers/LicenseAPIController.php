@@ -78,10 +78,21 @@ Class LicenseAPIController {
 		$licenseKey = \get_option( $this->settings->slug . '_license', '' );
 
 		if( empty( $licenseKey ) ) {
-			return [
-				'success' 	=> false,
-				'data'		=> [ 'error' => esc_html__( 'The license is missing', 'letsgodev' ) ],
+			
+			$result = [
+				'error'	=> esc_html__( 'The license is missing', 'letsgodev' ),
+				'data'	=> [
+					'method'	=> 'checkLicense',
+				]
 			];
+
+			// Last Result
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
+
+			return false;
 		}
 
 		// Process Request
@@ -122,12 +133,18 @@ Class LicenseAPIController {
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			self::$result[ $this->settings->slug ] = [
+			$result = [
 				'error'	=> $response->get_error_message(),
 				'data'	=> [
-					'body'	=> []
+					'method'	=> 'getInfo',
 				]
 			];
+
+			// Last Result
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
 
 			return false;
 		}
@@ -160,12 +177,18 @@ Class LicenseAPIController {
 		// is Down Server
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
-			self::$result[ $this->settings->slug ] = [
+			$result = [
 				'error'	=> $response->get_error_message(),
 				'data'	=> [
-					'body'	=> []
+					'method'	=> 'checkUpdate',
 				]
 			];
+
+			// Last Result
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
 
 			return false;
 		}
@@ -203,16 +226,30 @@ Class LicenseAPIController {
 	}
 
 
-
+	/**
+	 * Deactivate
+	 * @return mixed
+	 */
 	public function deactivate() {
 		// Check License
 		$licenseKey = \get_option( $this->settings->slug . '_license', '' );
 
 		if( empty( $licenseKey ) ) {
-			return [
-				'success' 	=> false,
-				'data'		=> [ 'error' => esc_html__( 'The license is missing', 'letsgodev' ) ],
+
+			$result = [
+				'error'		=> \esc_html__( 'The license is missing', 'letsgodev' ),
+				'data'		=> [
+					'method'	=> 'deactivate',
+				]
 			];
+
+			// Last Result
+			self::$result[ $this->settings->slug ] = $result;
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
+
+			return false;
 		}
 
 		// Process Request
@@ -222,10 +259,10 @@ Class LicenseAPIController {
 		$isSuccess = $this->processResponse( $response, [ 's201' ] );
 
 		if( $isSuccess ) {
-			delete_option( $this->settings->slug . '_license' );
+			\delete_option( $this->settings->slug . '_license' );
 			//delete_option( $this->settings->slug . '_license_dates' );
-			delete_transient( $this->settings->slug . '_has_license' );
-			delete_transient( $this->settings->slug . '_license_expired' );
+			\delete_transient( $this->settings->slug . '_has_license' );
+			\delete_transient( $this->settings->slug . '_license_expired' );
 		}
 
 		return $isSuccess;
@@ -242,7 +279,7 @@ Class LicenseAPIController {
 
 		// Get License
 		if( empty( $licenseKey ) ) {
-			$licenseKey = get_option( $this->settings->slug . '_license', '' );
+			$licenseKey = \get_option( $this->settings->slug . '_license', '' );
 		}
 
 		$params = [
@@ -282,6 +319,7 @@ Class LicenseAPIController {
 			$result = [
 				'error'		=> \esc_html__( 'Server is down right', 'letsgodev' ),
 				'data'		=> [
+					'method'	=> 'processResponse',
 					'response'	=> $response->get_error_message(),
 					'api_url'	=> $this->settings->api_url,
 					'product'	=> $this->settings->product,
@@ -322,6 +360,7 @@ Class LicenseAPIController {
 			$result = [
 				'error'		=> \esc_html__( 'There was a problem establishing a connection to the API server', 'letsgodev' ),
 				'data'		=> [
+					'method'	=> 'processResponse',
 					'api_url'	=> $this->settings->api_url,
 					'product'	=> $this->settings->product,
 					'domain'	=> $this->settings->domain,
@@ -346,8 +385,9 @@ Class LicenseAPIController {
 			$result = [
 				'error'	=> $body->message ?? '',
 				'data'	=> [
-					'code'	=> $body->status_code ?? '',
-					'body'	=> $body,
+					'method'	=> 'processResponse',
+					'code'		=> $body->status_code ?? '',
+					'body'		=> $body,
 				]
 			];
 			
@@ -365,6 +405,7 @@ Class LicenseAPIController {
 			$result = [
 				'error'		=> $body->message ?? '',
 				'data'		=> [
+					'method'	=> 'processResponse',
 					'response'	=> \esc_html__( 'Status Code no allowed', 'letsgodev' ),
 					'allowed'	=> $allowedCodes,
 					'code'		=> $body->status_code ?? '',
@@ -407,13 +448,15 @@ Class LicenseAPIController {
 		$result = [
 			'error'	=> '',
 			'data'	=> [
-				'code'	=> $body->status_code,
+				'method'	=> 'processResponse',
+				'code'		=> $body->status_code,
+				'start'		=> $body->licence_start ?? '',
+				'expire'	=> $body->licence_expire ?? '',
 			],
 		];
 
 		// LastResult
 		self::$result[ $this->settings->slug ] = $result;
-
 		
 		return true;
 	}

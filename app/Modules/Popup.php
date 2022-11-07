@@ -3,7 +3,6 @@
 namespace LetsGoDev\Modules;
 
 use LetsGoDev\Classes\Module;
-use LetsGoDev\Classes\Logger;
 
 /**
  * Popup/Modal to configure license
@@ -84,13 +83,13 @@ class Popup extends Module {
 
 		wp_register_script(
 			'letsgodev-license-popup-js',
-			$this->settings->url . 'resources/assets/scripts/License.js',
+			$this->settings->url . 'resources/assets/scripts/license-popup.js',
 			[ 'jquery' ], false, true
 		);
 
 		wp_register_style(
 			'letsgodev-license-popup-css',
-			$this->settings->url . 'resources/assets/styles/License.css'
+			$this->settings->url . 'resources/assets/styles/license-popup.css'
 		);
 
 		wp_enqueue_script( 'letsgodev-license-popup-js' );
@@ -98,19 +97,11 @@ class Popup extends Module {
 
 		$loading_icon = admin_url( 'images/spinner-2x.gif' );
 
-		// We verify if it is a redirect from activate license method
-		$refresh = get_transient( $this->settings->slug . '_redirect' );
-
-		if( $refresh ) {
-			delete_transient( $this->settings->slug . '_redirect' );
-		}
-
 		$data = [
 			'loading_html'	=> sprintf( '<img src="%s" alt="loading" />', $loading_icon ),
 			'ajax_url'		=> admin_url( 'admin-ajax.php' ),
 			'wpnonce'		=> wp_create_nonce( 'letsgodev-wpnonce' ),
 			'unlink_text'	=> esc_html__( 'Unlink from this website', 'letsgodev' ),
-			'refresh'		=> $refresh,
 		];
 
 		wp_localize_script( 'letsgodev-license-popup-js', 'letsgo', $data );
@@ -140,17 +131,30 @@ class Popup extends Module {
 			] );
 		}
 
+
+		$license_dates = get_option( $this->settings->slug . '_license_dates', [] );
+		
+		$expire = $result['data']['expire'] ?: ( $license_dates['expire'] ?? '' );
+
 		// Check the status code
 		switch( $result['data']['code'] ) {
 			
 			case 's205' :
 			case 's215' :
+
+				$box_message = sprintf(
+					'%s <br /> %s',
+					esc_html__( 'The license key is active to this domain', 'letsgodev' ),
+					sprintf( esc_html__( 'Expire: %s', 'letsgodev'), $expire )
+				);
+
 				$success = true;
 				$return = [
 					'is_active'		=> 1,
 					'box_class'		=> 'success',
-					'box_message'	=> esc_html__( 'The license key is active to this domain', 'letsgodev' ),
+					'box_message'	=> $box_message,
 				];
+
 				break;
 			
 			case 's203' :

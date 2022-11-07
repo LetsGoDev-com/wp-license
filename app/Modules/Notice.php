@@ -3,7 +3,6 @@
 namespace LetsGoDev\Modules;
 
 use LetsGoDev\Classes\Module;
-use LetsGoDev\Classes\Logger;
 
 /**
  * Box where the user enter the license
@@ -29,6 +28,9 @@ class Notice extends Module {
 		// Box to enter the license
 		add_action( 'admin_notices', [ $this, 'printLicenseBox' ] );
 
+		// Box when the license is activated
+		add_action( 'admin_notices', [ $this, 'printLicenseActivated' ] );
+
 		// Alert message when the license expired
 		add_action( 'admin_notices', [ $this, 'printLicenseExpired' ] );
 
@@ -46,10 +48,28 @@ class Notice extends Module {
 
 		wp_register_style(
 			'letsgodev-license-notice-css',
-			$this->settings->url . 'resources/assets/styles/License-Notice.css'
+			$this->settings->url . 'resources/assets/styles/license-notice.css'
 		);
 
+		wp_register_script(
+			'letsgodev-license-notice-js',
+			$this->settings->url . 'resources/assets/scripts/license-notice.js',
+			[ 'jquery' ], false, true
+		);
+
+		wp_enqueue_script( 'letsgodev-license-notice-js' );
 		wp_enqueue_style( 'letsgodev-license-notice-css' );
+
+
+		$loading_icon = admin_url( 'images/spinner-2x.gif' );
+
+		$data = [
+			'wpnonce'		=> wp_create_nonce( 'letsgodev-wpnonce' ),
+			'hasRedirect'	=> ! empty( $this->settings->redirect ),
+			'redirect'		=> $this->settings->redirect,
+		];
+
+		wp_localize_script( 'letsgodev-license-popup-js', 'letsgoNotice', $data );
 	}
 
 
@@ -101,6 +121,32 @@ class Notice extends Module {
 
 
 	/**
+	 * Print notice when the license is activated
+	 * @return html
+	 */
+	public function printLicenseActivated() {
+
+		$isActivated = \get_transient( $this->settings->slug . '_license_activated' );
+
+		if( ! $isActivated ) {
+			return;
+		}
+
+		// Remove transient
+		\delete_transient( $this->settings->slug . '_license_activated' );
+
+		$loadingHtml 	= sprintf(
+			'<img src="%s" alt="loading" />', admin_url( 'images/spinner-2x.gif' )
+		);
+
+		$name 			= $this->settings->name;
+		$hasRedirect 	= ! empty( $this->settings->redirect );
+
+		include $this->settings->dir . 'resources/views/license-activated.php';
+	}
+
+
+	/**
 	 * Activate License
 	 * @param  string $license_key
 	 * @return mixed
@@ -118,11 +164,18 @@ class Notice extends Module {
 		// Activating License
 		$isActivated = $this->api()->activate( $licenseKey );
 
-		// If there is a redirect
-		if( $isActivated && ! empty( $this->settings->redirect ) ) {
-			wp_redirect( $this->settings->redirect );
-        	exit;
+		// If it is activated
+		if( $isActivated ) {
+			\set_transient(
+        		$this->settings->slug . '_license_activated', true, HOUR_IN_SECONDS
+        	);
 		}
+
+		// If there is a redirect
+		//if( $isActivated && ! empty( $this->settings->redirect ) ) {
+		//	wp_redirect( $this->settings->redirect );
+        //	exit;
+		//}
 		
 		return $isActivated;
 	}

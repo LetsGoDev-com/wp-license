@@ -97,7 +97,6 @@
 			// Empty button content
 			$('#letsgodev_box_button').empty();
 
-
 			// We prepare the information to Ajax event
 			const data = {
 				action: slug + '_get_status',
@@ -118,7 +117,6 @@
 			const onError = function(jqxhr, textStatus, error) {
 				console.log('License Ajax error: ' + textStatus + ' - ' + error);
 			};
-
 
 			if( letsgo && letsgo.ajax_url ) {
 				LetsgoLicense.sendAjax(data, onSuccess, onError);
@@ -151,7 +149,6 @@
 			// Empty button content
 			$('#letsgodev_box_button').empty();
 
-
 			// We prepare the information to Ajax event
 			const data = {
 				action: slug + '_set_unlink',
@@ -171,7 +168,6 @@
 			const onError = function(jqxhr, textStatus, error) {
 				console.log('License Ajax unlink error: ' + textStatus + ' - ' + error);
 			};
-
 
 			if( letsgo && letsgo.ajax_url ) {
 				LetsgoLicense.sendAjax(data, onSuccess, onError);

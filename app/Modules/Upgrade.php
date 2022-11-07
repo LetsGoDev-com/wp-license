@@ -3,7 +3,6 @@
 namespace LetsGoDev\Modules;
 
 use LetsGoDev\Classes\Module;
-use LetsGoDev\Classes\Logger;
 
 /**
  * Popup/Modal to configure license
