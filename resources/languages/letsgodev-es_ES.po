@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Letsgodev License\n"
-"POT-Creation-Date: 2022-10-30 23:13-0300\n"
-"PO-Revision-Date: 2022-10-30 23:15-0300\n"
+"POT-Creation-Date: 2022-11-07 19:24-0300\n"
+"PO-Revision-Date: 2022-11-07 19:25-0300\n"
 "Last-Translator: \n"
 "Language-Team: Letsgodev\n"
 "Language: es\n"
@@ -16,66 +16,79 @@ msgstr ""
 "X-Poedit-SearchPath-0: resources\n"
 "X-Poedit-SearchPath-1: app\n"
 
-#: app/Controllers/LicenseAPIController.php:74
-#: app/Controllers/LicenseAPIController.php:186
+#: app/Controllers/LicenseAPIController.php:83
+#: app/Controllers/LicenseAPIController.php:240
 msgid "The license is missing"
 msgstr "No hay licencia"
 
-#: app/Controllers/LicenseAPIController.php:255
+#: app/Controllers/LicenseAPIController.php:320
 msgid "Server is down right"
 msgstr "Letsgodev está caído"
 
-#: app/Controllers/LicenseAPIController.php:289
+#: app/Controllers/LicenseAPIController.php:361
 msgid "There was a problem establishing a connection to the API server"
 msgstr "Hubo un problema  estableciendo una conexión con el servidor API"
 
-#: app/Controllers/LicenseAPIController.php:303
+#: app/Controllers/LicenseAPIController.php:409
 msgid "Status Code no allowed"
 msgstr "Código de estado no permitido"
 
-#: app/License.php:80 app/License.php:87
+#: app/License.php:82 app/License.php:89
 msgid "Cheatin&#8217; huh?"
 msgstr "Cheatin&#8217; huh?"
 
-#: app/Modules/Links.php:48
+#: app/Modules/Links.php:47
 msgid "Documentation"
 msgstr "Documentación"
 
-#: app/Modules/Links.php:54
+#: app/Modules/Links.php:53
 msgid "Support"
 msgstr "Soporte"
 
-#: app/Modules/Links.php:60
+#: app/Modules/Links.php:59
 msgid "More Premiun Plugins"
 msgstr "Más Plugins Premium"
 
-#: app/Modules/Popup.php:64
+#: app/Modules/Popup.php:63
 msgid "Manager Licenses"
 msgstr "Administrar Licencias"
 
-#: app/Modules/Popup.php:112
+#: app/Modules/Popup.php:104
 msgid "Unlink from this website"
 msgstr "Desvincular desde este dominio"
 
-#: app/Modules/Popup.php:149
+#: app/Modules/Popup.php:147
 msgid "The license key is active to this domain"
 msgstr "La licencia está activada para este dominio"
 
-#: app/Modules/Popup.php:158
+#: app/Modules/Popup.php:148
+#, php-format
+msgid "Expire: %s"
+msgstr "Expira: %s"
+
+#: app/Modules/Popup.php:165
 msgid "The license key is unlinked"
 msgstr "La licencia está desvinculada"
 
-#: app/Modules/Popup.php:193
+#: app/Modules/Popup.php:203
 msgid "The license key was successfully unlinked"
 msgstr "La licencia fue satisfactoriamente desvinculada"
 
-#: app/Modules/Upgrade.php:123
+#: app/Modules/Upgrade.php:128
 msgid "An Unexpected HTTP Error occurred during the API request."
 msgstr "Un inesperado error HTTP ocurrió durante la respuesta de la API."
 
-#: app/Modules/Upgrade.php:123
+#: app/Modules/Upgrade.php:128
 msgid "Try again"
 msgstr "Intenta otra vez"
+
+#: resources/views/license-activated.php:6
+msgid "Plugin activated and ready to use."
+msgstr "Plugin activado y listo para usar."
+
+#: resources/views/license-activated.php:7
+msgid "Redirecting..."
+msgstr "Redireccionando..."
 
 #: resources/views/license-box.php:6
 msgid "Please enter your license code"
