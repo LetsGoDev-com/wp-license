@@ -23,19 +23,19 @@ class Notice extends Module {
 	 */
 	public function iniHooks() {
 		// Activating license
-		add_action( 'admin_init', [ $this, 'activateLicense' ] );
+		\add_action( 'admin_init', [ $this, 'activateLicense' ] );
 
 		// Box to enter the license
-		add_action( 'admin_notices', [ $this, 'printLicenseBox' ] );
+		\add_action( 'admin_notices', [ $this, 'printLicenseBox' ] );
 
 		// Box when the license is activated
-		add_action( 'admin_notices', [ $this, 'printLicenseActivated' ] );
+		\add_action( 'admin_notices', [ $this, 'printLicenseActivated' ] );
 
 		// Alert message when the license expired
-		add_action( 'admin_notices', [ $this, 'printLicenseExpired' ] );
+		\add_action( 'admin_notices', [ $this, 'printLicenseExpired' ] );
 
 		// Enqueue scripts for admin
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts'] );
+		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts'] );
 	}
 
 
@@ -44,32 +44,21 @@ class Notice extends Module {
 	 * @return mixed
 	 */
 	public function enqueueScripts() {
-		$screen = get_current_screen();
+		$screen = \get_current_screen();
 
-		wp_register_style(
+		\wp_register_style(
 			'letsgodev-license-notice-css',
 			$this->settings->url . 'resources/assets/styles/license-notice.css'
 		);
 
-		wp_register_script(
+		\wp_register_script(
 			'letsgodev-license-notice-js',
 			$this->settings->url . 'resources/assets/scripts/license-notice.js',
 			[ 'jquery' ], false, true
 		);
 
-		wp_enqueue_script( 'letsgodev-license-notice-js' );
-		wp_enqueue_style( 'letsgodev-license-notice-css' );
-
-
-		$loading_icon = admin_url( 'images/spinner-2x.gif' );
-
-		$data = [
-			'wpnonce'		=> wp_create_nonce( 'letsgodev-wpnonce' ),
-			'hasRedirect'	=> ! empty( $this->settings->redirect ),
-			'redirect'		=> $this->settings->redirect,
-		];
-
-		wp_localize_script( 'letsgodev-license-popup-js', 'letsgoNotice', $data );
+		\wp_enqueue_style( 'letsgodev-license-notice-css' );
+		\wp_enqueue_script( 'letsgodev-license-notice-js' );
 	}
 
 
@@ -136,11 +125,12 @@ class Notice extends Module {
 		\delete_transient( $this->settings->slug . '_license_activated' );
 
 		$loadingHtml 	= sprintf(
-			'<img src="%s" alt="loading" />', admin_url( 'images/spinner-2x.gif' )
+			'<img src="%s" alt="loading" />', admin_url( 'images/spinner.gif' )
 		);
 
 		$name 			= $this->settings->name;
 		$hasRedirect 	= ! empty( $this->settings->redirect );
+		$redirect 		= $this->settings->redirect;
 
 		include $this->settings->dir . 'resources/views/license-activated.php';
 	}
@@ -159,7 +149,7 @@ class Notice extends Module {
 		}
 
 		// Remove html to license key
-		$licenseKey = esc_html( $_POST[ $this->settings->slug . '_license_key' ] );
+		$licenseKey = \esc_html( $_POST[ $this->settings->slug . '_license_key' ] );
 		
 		// Activating License
 		$isActivated = $this->api()->activate( $licenseKey );
@@ -170,12 +160,6 @@ class Notice extends Module {
         		$this->settings->slug . '_license_activated', true, HOUR_IN_SECONDS
         	);
 		}
-
-		// If there is a redirect
-		//if( $isActivated && ! empty( $this->settings->redirect ) ) {
-		//	wp_redirect( $this->settings->redirect );
-        //	exit;
-		//}
 		
 		return $isActivated;
 	}

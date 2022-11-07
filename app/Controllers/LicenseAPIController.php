@@ -108,7 +108,7 @@ Class LicenseAPIController {
 	 * @return boolean
 	 */
 	public function isActive() {
-		return $this->hasLicense() && ! get_transient( $this->settings->slug . '_license_expired' );
+		return $this->hasLicense() && ! \get_transient( $this->settings->slug . '_license_expired' );
 	}
 
 
@@ -117,7 +117,7 @@ Class LicenseAPIController {
 	 * @return boolean
 	 */
 	public function isExpired() {
-		return get_transient( $this->settings->slug . '_license_expired' );
+		return \get_transient( $this->settings->slug . '_license_expired' );
 	}
 
 
@@ -219,7 +219,7 @@ Class LicenseAPIController {
 		$isSuccess = $this->processResponse( $response, [ 's100', 's101' ] );
 
 		if( $isSuccess ) {
-			update_option( $this->settings->slug . '_license', $licenseKey );
+			\update_option( $this->settings->slug . '_license', $licenseKey );
 		}
 
 		return $isSuccess;

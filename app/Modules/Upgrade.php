@@ -125,7 +125,7 @@ class Upgrade extends Module {
 
         // If error
         if( ! $isInfo ) {
-            return new WP_Error('plugins_api_failed', esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
+            return new WP_Error('plugins_api_failed', \esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. \esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
         }
 
         $responseBlock = json_decode( $result[ 'data' ][ 'body' ] );

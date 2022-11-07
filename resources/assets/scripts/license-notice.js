@@ -48,17 +48,19 @@
 		 * @since 1.0.0
 		 */
 		executeUIActions: function() {
-			
-			// If it has redirect
-			if( letsgoNotice.hasRedirect ) {
 
-				// Redirect after 3 seconds
-				window.setTimeout(function(){
-					window.location.href = letsgoNotice.redirect;
-				}, 3000 );
-			}
+			// Check if exists some redirect
+			$( '.letsgodev_license_redirect' ).each( function() {
+				const redirect = $(this).data('redirect');
+
+				if( redirect != null && redirect.length ) {
+					window.setTimeout( function() {
+						window.location.href = redirect;
+					}, 2000 );
+				}
+			});
+
 		}
-	
 	};
 
 	LetsgoLicenseNotice.init();

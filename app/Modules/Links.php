@@ -23,7 +23,7 @@ class Links extends Module {
 	public function iniHooks() {
 		
 		// Plugin Info Links
-		add_filter( 'plugin_row_meta', [ $this, 'pluginInfo' ], 10, 2 );
+		\add_filter( 'plugin_row_meta', [ $this, 'pluginInfo' ], 10, 2 );
 	}
 
 
@@ -44,19 +44,19 @@ class Links extends Module {
 				'<a href="%s" target="_blank" title="%s">%s</a>',
 				$this->settings->doc,
 				$this->settings->name,
-				esc_html__( 'Documentation', 'letsgodev' )
+				\esc_html__( 'Documentation', 'letsgodev' )
 			),
 			'support' => sprintf(
 				'<a href="%s" target="_blank" title="%s">%s</a>',
-				esc_url( 'https://www.letsgodev.com/contact/' ),
+				\esc_url( 'https://www.letsgodev.com/contact/' ),
 				$this->settings->name,
-				esc_html__( 'Support', 'letsgodev' )
+				\esc_html__( 'Support', 'letsgodev' )
 			),
 			'buy' => sprintf(
 				'<a href="%s" target="_blank" title="%s">%s</a>',
-				esc_url( 'https://www.letsgodev.com/' ),
+				\esc_url( 'https://www.letsgodev.com/' ),
 				$this->settings->name,
-				esc_html__( 'More Premiun Plugins', 'letsgodev' )
+				\esc_html__( 'More Premiun Plugins', 'letsgodev' )
 			),
 		];
 

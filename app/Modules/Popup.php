@@ -48,7 +48,7 @@ class Popup extends Module {
 	public function pluginInfo( $links ) {
 
 		// License key
-		$license = get_option( $this->settings->slug . '_license', '' );
+		$license = \get_option( $this->settings->slug . '_license', '' );
 
 		if( ! isset( $license ) || empty( $license ) )
 			return $links;
@@ -60,7 +60,7 @@ class Popup extends Module {
 		$links['license'] = sprintf(
 			'<a href="#open-license" class="letsgodev_license" data-slug="%s">%s</a>',
 			$this->settings->slug,
-			esc_html__( 'Manager Licenses', 'letsgodev' )
+			\esc_html__( 'Manager Licenses', 'letsgodev' )
 		);
 
 		// Add it to the end
@@ -75,36 +75,36 @@ class Popup extends Module {
 	 * @return mixed
 	 */
 	public function enqueueScripts() {
-		$screen = get_current_screen();
+		$screen = \get_current_screen();
 
 		// In plugin page
 		if ( ! isset( $screen->base ) || 'plugins' != $screen->base )
 			return;
 
-		wp_register_script(
+		\wp_register_script(
 			'letsgodev-license-popup-js',
 			$this->settings->url . 'resources/assets/scripts/license-popup.js',
 			[ 'jquery' ], false, true
 		);
 
-		wp_register_style(
+		\wp_register_style(
 			'letsgodev-license-popup-css',
 			$this->settings->url . 'resources/assets/styles/license-popup.css'
 		);
 
-		wp_enqueue_script( 'letsgodev-license-popup-js' );
-		wp_enqueue_style( 'letsgodev-license-popup-css' );
+		\wp_enqueue_script( 'letsgodev-license-popup-js' );
+		\wp_enqueue_style( 'letsgodev-license-popup-css' );
 
-		$loading_icon = admin_url( 'images/spinner-2x.gif' );
+		$loading_icon = \admin_url( 'images/spinner-2x.gif' );
 
 		$data = [
 			'loading_html'	=> sprintf( '<img src="%s" alt="loading" />', $loading_icon ),
-			'ajax_url'		=> admin_url( 'admin-ajax.php' ),
-			'wpnonce'		=> wp_create_nonce( 'letsgodev-wpnonce' ),
-			'unlink_text'	=> esc_html__( 'Unlink from this website', 'letsgodev' ),
+			'ajax_url'		=> \admin_url( 'admin-ajax.php' ),
+			'wpnonce'		=> \wp_create_nonce( 'letsgodev-wpnonce' ),
+			'unlink_text'	=> \esc_html__( 'Unlink from this website', 'letsgodev' ),
 		];
 
-		wp_localize_script( 'letsgodev-license-popup-js', 'letsgo', $data );
+		\wp_localize_script( 'letsgodev-license-popup-js', 'letsgo', $data );
 	}
 
 
@@ -124,7 +124,7 @@ class Popup extends Module {
 		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		if( ! $isChecked ) {
-			wp_send_json_error( [
+			\wp_send_json_error( [
 				'isactive'	=> 0,
 				'class'		=> 'error',
 				'message'	=> $result['error'] ?? '',
@@ -132,7 +132,7 @@ class Popup extends Module {
 		}
 
 
-		$license_dates = get_option( $this->settings->slug . '_license_dates', [] );
+		$license_dates = \get_option( $this->settings->slug . '_license_dates', [] );
 		
 		$expire = $result['data']['expire'] ?: ( $license_dates['expire'] ?? '' );
 
@@ -144,8 +144,8 @@ class Popup extends Module {
 
 				$box_message = sprintf(
 					'%s <br /> %s',
-					esc_html__( 'The license key is active to this domain', 'letsgodev' ),
-					sprintf( esc_html__( 'Expire: %s', 'letsgodev'), $expire )
+					\esc_html__( 'The license key is active to this domain', 'letsgodev' ),
+					sprintf( \esc_html__( 'Expire: %s', 'letsgodev'), $expire )
 				);
 
 				$success = true;
@@ -169,11 +169,11 @@ class Popup extends Module {
 
 		// If error
 		if( ! $success ) {
-			wp_send_json_error( $return );
+			\wp_send_json_error( $return );
 		}
 		
 		
-		wp_send_json_success( $return );
+		\wp_send_json_success( $return );
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Popup extends Module {
 	 * @return mixed
 	 */
 	public function ajaxUnlink() {
-		if ( ! wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) )
+		if ( ! \wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) )
         	die( 'Busted!');
 
 
@@ -192,15 +192,15 @@ class Popup extends Module {
 		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		if( ! $isDeactivated ) {
-			wp_send_json_error( [
+			\wp_send_json_error( [
 				'box_class'		=> 'error',
 				'box_message'	=> $result['error'] ?? '',
 			] );
 		}
 		
-		wp_send_json_success( [
+		\wp_send_json_success( [
 			'box_class'		=> 'success',
-			'box_message'	=> esc_html__( 'The license key was successfully unlinked', 'letsgodev' ),
+			'box_message'	=> \esc_html__( 'The license key was successfully unlinked', 'letsgodev' ),
 		] );
 	}
 
@@ -210,9 +210,9 @@ class Popup extends Module {
 	 * @return mixed
 	 */
 	public function printPopup() {
-		$screen = get_current_screen();
+		$screen = \get_current_screen();
 
-		if( ! is_admin() || ! isset( $screen->base ) || 'plugins' != $screen->base )
+		if( ! \is_admin() || ! isset( $screen->base ) || 'plugins' != $screen->base )
 			return;
 
 		include $this->settings->dir . 'resources/views/popup.php';
