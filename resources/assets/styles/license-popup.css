@@ -45,6 +45,17 @@
 	border-radius: .25rem;
 }
 
+#letsgodev_box_message.info {
+	color: #055160;
+	background-color: #cff4fc;
+	border-color: #b6effb;
+	position: relative;
+	padding: .75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
 #letsgodev_box_message.warning {
 	color: #856404;
 	background-color: #fff3cd;
@@ -81,10 +92,26 @@
 	user-select: none;
 	border: 1px solid transparent;
 	padding: .375rem .75rem;
-	font-size: 1rem;
+	font-size: 0.9rem;
 	line-height: 1.5;
 	border-radius: .25rem;
 	cursor: pointer;
+	margin: 1px;
+}
+
+#letsgodev_button_update {
+	padding: 0.375rem 0.75rem;
+	display: inline-block;
+	font-weight: 400;
+	-webkit-appearance: button;
+	font-size: 0.9rem;
+	border-radius: 0.25rem;
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	line-height: 1.5;
+	margin: 1px;
 }
 
 #letsgodev_box_link {

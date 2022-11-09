@@ -36,6 +36,9 @@ class Popup extends Module {
 		$unlinkHook = sprintf( 'wp_ajax_%s_set_unlink', $this->settings->slug );
 		add_action( $unlinkHook, [ $this, 'ajaxUnlink'] );
 
+		$getUpdateHook = sprintf( 'wp_ajax_%s_get_update', $this->settings->slug );
+		add_action( $getUpdateHook, [ $this, 'ajaxUpdate' ] );
+
 		// Print the popup
 		add_action( 'admin_footer', [ $this, 'printPopup' ], 1 );
 	}
@@ -102,6 +105,7 @@ class Popup extends Module {
 			'ajax_url'		=> \admin_url( 'admin-ajax.php' ),
 			'wpnonce'		=> \wp_create_nonce( 'letsgodev-wpnonce' ),
 			'unlink_text'	=> \esc_html__( 'Unlink from this website', 'letsgodev' ),
+			'update_text'	=> \esc_html__( 'Check updates', 'letsgodev' ),
 		];
 
 		\wp_localize_script( 'letsgodev-license-popup-js', 'letsgo', $data );
@@ -114,8 +118,9 @@ class Popup extends Module {
 	 */
 	public function ajaxStatus() {
 
-		if ( ! wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) )
-        	die ( 'Busted!');
+		if ( ! wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) ) {
+			die ( 'Busted!');
+		}
 		
 		// Check the license
 		$isChecked = $this->api()->checkLicense();
@@ -181,11 +186,12 @@ class Popup extends Module {
 	 * @return mixed
 	 */
 	public function ajaxUnlink() {
-		if ( ! \wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) )
-        	die( 'Busted!');
+		if ( ! \wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) ) {
+			die( 'Busted!');
+		}
 
 
-        // Check the license
+		// Check the license
 		$isDeactivated = $this->api()->deactivate();
 
 		// Get last result
@@ -206,6 +212,56 @@ class Popup extends Module {
 
 
 	/**
+	 * Ajax Check updates
+	 * @return mixed
+	 */
+	public function ajaxUpdate() {
+		if ( ! wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) ) {
+			die ( 'Busted!');
+		}
+		
+		// Check the license
+		$isChecked = $this->api()->checkUpdate( true );
+
+		// Result from check the license
+		$result = $this->api()->getLastResult( $this->settings->slug );
+
+		if( ! $isChecked ) {
+			$return = [
+				'box_class'		=> 'error',
+				'box_message'	=> $result['error'] ?? '',
+			];
+
+			\wp_send_json_error( $return );
+		}
+
+		$responseBody = json_decode( $result[ 'data' ][ 'body' ] );
+		
+		// If is no update
+		if( empty( $responseBody ) ) {
+			$return = [
+				'refresh'		=> false,
+				'box_class'		=> 'info',
+				'box_message'	=> esc_html__( 'No update available', 'letsgodev' ),
+			];
+
+			\wp_send_json_success( $return );
+		}
+
+		// Clean Cache Plugin
+		\wp_clean_plugins_cache( true );
+
+		$return = [
+			'refresh'		=> true,
+			'box_class'		=> 'success',
+			'box_message'	=> esc_html__( 'Update available! Refreshing page...', 'letsgodev' ),
+		];
+
+		\wp_send_json_success( $return );
+	}
+
+
+	/**
 	 * Print Box
 	 * @return mixed
 	 */
@@ -217,7 +273,5 @@ class Popup extends Module {
 
 		include $this->settings->dir . 'resources/views/popup.php';
 	}
-
-
 	
 }

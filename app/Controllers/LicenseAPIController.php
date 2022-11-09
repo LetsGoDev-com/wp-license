@@ -162,13 +162,14 @@ Class LicenseAPIController {
 
 	/**
 	 * Check Update
+	 * @param boolean $forcePluginUpdate
 	 * @return mixed
 	 */
-	public function checkUpdate() {
+	public function checkUpdate( bool $forcePluginUpdate = false ) {
 		global $wp_version;
 
 		// Get params
-		if( $this->isActive() ) {
+		if( $this->isActive() || $forcePluginUpdate ) {
 			$response = $this->processRequest( 'plugin_update' );
 		} else {
 			$response = $this->processRequest( 'code_version' );

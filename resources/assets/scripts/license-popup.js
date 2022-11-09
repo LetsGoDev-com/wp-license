@@ -58,6 +58,14 @@
 				LetsgoLicense.unlinkLicense(slug);
 			});
 
+			// Check if exist some update
+			$(document).on('click', '#letsgodev_button_update', function(e) {
+				e.preventDefault();
+				const slug = $(this).data('slug');
+
+				LetsgoLicense.checkUpdateLicense(slug);
+			});
+
 			// ClosePopup when the user click "close popup"
 			$('#letsgodev_box_close').on( 'click', function(e) {
 				e.preventDefault();
@@ -83,7 +91,7 @@
 			const loading = '<div style="text-align:center;">' + letsgo.loading_html + '</div>';
 
 			// Remove all the messages
-			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning');
+			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning').removeClass('info');
 			
 			// Put the class
 			$('#letsgodev_box_license').addClass(slug);
@@ -109,8 +117,9 @@
 				$('#letsgodev_box_message').html(response.data.box_message);
 
 				if( response.success && response.data.is_active ) {
-					const box_button = '<button id="letsgodev_button_unlink" data-slug="' + slug + '">' + letsgo.unlink_text + '</button>';
-					$('#letsgodev_box_button').html(box_button);
+					const box_button = '<button id="letsgodev_button_unlink" data-slug="' + slug + '">' + letsgo.unlink_text + '</button>',
+						box_update = '<button id="letsgodev_button_update" data-slug="' + slug + '" title="'+letsgo.update_text+'"><span class="dashicons dashicons-update"></span></button>';
+					$('#letsgodev_box_button').html(box_button + box_update );
 				}
 			};
 
@@ -141,7 +150,7 @@
 			const loading = '<div style="text-align:center;">' + letsgo.loading_html + '</div>';
 
 			// Remove all the messages
-			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning');
+			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning').removeClass('info');
 			
 			// Put loading icon in message section
 			$('#letsgodev_box_message').html(loading);
@@ -167,6 +176,48 @@
 
 			const onError = function(jqxhr, textStatus, error) {
 				console.log('License Ajax unlink error: ' + textStatus + ' - ' + error);
+			};
+
+			if( letsgo && letsgo.ajax_url ) {
+				LetsgoLicense.sendAjax(data, onSuccess, onError);
+			}
+		},
+
+		/**
+		 * Check if exist some update
+		 * @param  {String} slug
+		 * @return mixed
+		 */
+		checkUpdateLicense: function( slug = '' ) {
+			const loading = '<div style="text-align:center;">' + letsgo.loading_html + '</div>';
+
+			// Remove all the messages
+			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning').removeClass('info');
+			
+			// Put loading icon in message section
+			$('#letsgodev_box_message').html(loading);
+			
+			// Empty button content
+			$('#letsgodev_box_update').empty();
+
+			// We prepare the information to Ajax event
+			const data = {
+				action: slug + '_get_update',
+				wpnonce: letsgo.wpnonce
+			};
+
+			const onSuccess = function (response) {
+
+				$('#letsgodev_box_message').addClass(response.data.box_class);
+				$('#letsgodev_box_message').html(response.data.box_message);
+
+				if( response.data.refresh ) {
+					setTimeout(window.location.reload.bind(window.location), 1000);
+				}
+			};
+
+			const onError = function(jqxhr, textStatus, error) {
+				console.log('License Ajax update error: ' + textStatus + ' - ' + error);
 			};
 
 			if( letsgo && letsgo.ajax_url ) {
