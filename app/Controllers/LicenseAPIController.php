@@ -261,7 +261,6 @@ Class LicenseAPIController {
 
 		if( $isSuccess ) {
 			\delete_option( $this->settings->slug . '_license' );
-			//delete_option( $this->settings->slug . '_license_dates' );
 			\delete_transient( $this->settings->slug . '_has_license' );
 			\delete_transient( $this->settings->slug . '_license_expired' );
 		}
@@ -349,7 +348,7 @@ Class LicenseAPIController {
 		}
 
 		// Receive Body
-		$dataBody = json_decode( \wp_remote_retrieve_body( $response ) );
+		$dataBody = \json_decode( \wp_remote_retrieve_body( $response ) );
 
 		// If is array
 		$body = isset( $dataBody[0] ) ? $dataBody[0] : $dataBody;
@@ -401,7 +400,7 @@ Class LicenseAPIController {
 			// IF success
 			return false;
 
-		} elseif( ! empty( $allowedCodes ) && ! in_array( $body->status_code, $allowedCodes ) ) {
+		} elseif( ! empty( $allowedCodes ) && ! \in_array( $body->status_code, $allowedCodes ) ) {
 
 			$result = [
 				'error'		=> $body->message ?? '',
@@ -441,7 +440,7 @@ Class LicenseAPIController {
 			// Remove license expired
 			\delete_transient( $this->settings->slug . '_license_expired' );
 		
-		} else {
+		} elseif( empty( $body->licence_expire ) ) {
 			\set_transient( $this->settings->slug . '_license_expired', 1, WEEK_IN_SECONDS );
 		}
 

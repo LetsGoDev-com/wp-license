@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Letsgodev License\n"
-"POT-Creation-Date: 2022-11-07 19:24-0300\n"
-"PO-Revision-Date: 2022-11-07 19:25-0300\n"
+"POT-Creation-Date: 2022-11-15 01:16-0300\n"
+"PO-Revision-Date: 2022-11-15 01:16-0300\n"
 "Last-Translator: \n"
 "Language-Team: Letsgodev\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SearchPath-1: app\n"
 
 #: app/Controllers/LicenseAPIController.php:83
-#: app/Controllers/LicenseAPIController.php:240
+#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:234
 msgid "The license is missing"
 msgstr "No hay licencia"
 
@@ -49,36 +49,60 @@ msgstr "Soporte"
 msgid "More Premiun Plugins"
 msgstr "Más Plugins Premium"
 
-#: app/Modules/Popup.php:63
+#: app/Modules/Popup.php:70
 msgid "Manager Licenses"
 msgstr "Administrar Licencias"
 
-#: app/Modules/Popup.php:104
+#: app/Modules/Popup.php:111
 msgid "Unlink from this website"
 msgstr "Desvincular desde este dominio"
 
-#: app/Modules/Popup.php:147
+#: app/Modules/Popup.php:112
+msgid "Link this website"
+msgstr "Vincular este dominio"
+
+#: app/Modules/Popup.php:113
+msgid "Check updates"
+msgstr "Revisar actualizaciones"
+
+#: app/Modules/Popup.php:156
 msgid "The license key is active to this domain"
 msgstr "La licencia está activada para este dominio"
 
-#: app/Modules/Popup.php:148
+#: app/Modules/Popup.php:157
 #, php-format
 msgid "Expire: %s"
 msgstr "Expira: %s"
 
-#: app/Modules/Popup.php:165
-msgid "The license key is unlinked"
-msgstr "La licencia está desvinculada"
+#: app/Modules/Popup.php:175
+msgid "The license key is unlinked. Please link it."
+msgstr "La licencia está desvinculada. Por favor vincularla."
 
-#: app/Modules/Popup.php:203
+#: app/Modules/Popup.php:184
+msgid "Error in the License."
+msgstr "Error en la licencia."
+
+#: app/Modules/Popup.php:216
 msgid "The license key was successfully unlinked"
 msgstr "La licencia fue satisfactoriamente desvinculada"
 
-#: app/Modules/Upgrade.php:128
+#: app/Modules/Popup.php:274
+msgid "The license key was successfully linked"
+msgstr "La licencia fue vinculada con éxito"
+
+#: app/Modules/Popup.php:311
+msgid "No update available"
+msgstr "No hay actualizaciones disponibles"
+
+#: app/Modules/Popup.php:323
+msgid "Update available! Refreshing page..."
+msgstr "Actualización disponible. Actualizando página..."
+
+#: app/Modules/Upgrade.php:135
 msgid "An Unexpected HTTP Error occurred during the API request."
 msgstr "Un inesperado error HTTP ocurrió durante la respuesta de la API."
 
-#: app/Modules/Upgrade.php:128
+#: app/Modules/Upgrade.php:135
 msgid "Try again"
 msgstr "Intenta otra vez"
 

@@ -3,6 +3,7 @@
 namespace LetsGoDev\Modules;
 
 use LetsGoDev\Classes\Module;
+use LetsGoDev\Classes\Logger;
 
 /**
  * Popup/Modal to configure license
@@ -35,6 +36,9 @@ class Popup extends Module {
 
 		$unlinkHook = sprintf( 'wp_ajax_%s_set_unlink', $this->settings->slug );
 		add_action( $unlinkHook, [ $this, 'ajaxUnlink'] );
+
+		$linkHook = sprintf( 'wp_ajax_%s_set_link', $this->settings->slug );
+		add_action( $linkHook, [ $this, 'ajaxLink'] );
 
 		$getUpdateHook = sprintf( 'wp_ajax_%s_get_update', $this->settings->slug );
 		add_action( $getUpdateHook, [ $this, 'ajaxUpdate' ] );
@@ -105,6 +109,7 @@ class Popup extends Module {
 			'ajax_url'		=> \admin_url( 'admin-ajax.php' ),
 			'wpnonce'		=> \wp_create_nonce( 'letsgodev-wpnonce' ),
 			'unlink_text'	=> \esc_html__( 'Unlink from this website', 'letsgodev' ),
+			'link_text'		=> \esc_html__( 'Link this website', 'letsgodev' ),
 			'update_text'	=> \esc_html__( 'Check updates', 'letsgodev' ),
 		];
 
@@ -136,16 +141,15 @@ class Popup extends Module {
 			] );
 		}
 
-
-		$license_dates = \get_option( $this->settings->slug . '_license_dates', [] );
-		
-		$expire = $result['data']['expire'] ?: ( $license_dates['expire'] ?? '' );
-
 		// Check the status code
 		switch( $result['data']['code'] ) {
 			
 			case 's205' :
 			case 's215' :
+
+				// License expire
+				$licenseDates = \get_option( $this->settings->slug . '_license_dates', [] );
+				$expire = $result['data']['expire'] ?: ( $licenseDates['expire'] ?? '' );
 
 				$box_message = sprintf(
 					'%s <br /> %s',
@@ -153,30 +157,33 @@ class Popup extends Module {
 					sprintf( \esc_html__( 'Expire: %s', 'letsgodev'), $expire )
 				);
 
-				$success = true;
 				$return = [
 					'is_active'		=> 1,
+					'is_unlink'		=> 0,
 					'box_class'		=> 'success',
 					'box_message'	=> $box_message,
 				];
 
 				break;
-			
+
 			case 's203' :
-				$success = false;
+
 				$return = [
 					'is_active'		=> 0,
+					'is_unlink'		=> 1,
 					'box_class'		=> 'warning',
-					'box_message'	=> esc_html__( 'The license key is unlinked', 'letsgodev' ),
+					'box_message'	=> \esc_html__( 'The license key is unlinked. Please link it.', 'letsgodev' ),
 				];
 				break;
-		}
 
-		// If error
-		if( ! $success ) {
-			\wp_send_json_error( $return );
+			default:
+				\wp_send_json_error( [
+					'is_active'		=> 0,
+					'is_unlink'		=> 0,
+					'box_class'		=> 'error',
+					'box_message'	=> \esc_html__( 'Error in the License.', 'letsgodev' ),
+				] );
 		}
-		
 		
 		\wp_send_json_success( $return );
 	}
@@ -209,6 +216,65 @@ class Popup extends Module {
 			'box_message'	=> \esc_html__( 'The license key was successfully unlinked', 'letsgodev' ),
 		] );
 	}
+
+	/**
+	 * Unassign the license from current domain
+	 * @return mixed
+	 */
+	public function ajaxLink() {
+		if ( ! \wp_verify_nonce( $_POST[ 'wpnonce' ], 'letsgodev-wpnonce' ) ) {
+			die( 'Busted!');
+		}
+
+		$licenseKey = \get_option( $this->settings->slug . '_license', '' );
+
+		if( empty( $licenseKey ) ) {
+
+			$result = [
+				'error'		=> \esc_html__( 'The license is missing', 'letsgodev' ),
+				'data'		=> [
+					'method'	=> 'ajaxLink',
+				]
+			];
+			
+			// Logger
+			Logger::message( $result, $this->settings->slug );
+
+			wp_send_json_error( [
+				'box_class'		=> 'error',
+				'box_message'	=> $result['error'] ?? '',
+			] );
+		}
+
+		// Activating License
+		$isActivated = $this->api()->activate( $licenseKey );
+
+		// This transient is for print a notice on the top window
+		if( ! $isActivated ) {
+
+			// Get last result
+			$result = $this->api()->getLastResult( $this->settings->slug );
+
+			// Logger
+			Logger::message( $result, $this->settings->slug );
+		
+			\wp_send_json_error( [
+				'box_class'		=> 'error',
+				'box_message'	=> $result['error'] ?? '',
+			] );
+		}
+
+
+		\set_transient(
+			$this->settings->slug . '_license_activated', true, HOUR_IN_SECONDS
+		);
+		
+		\wp_send_json_success( [
+			'box_class'		=> 'success',
+			'box_message'	=> \esc_html__( 'The license key was successfully linked', 'letsgodev' ),
+		] );
+	}
+
 
 
 	/**

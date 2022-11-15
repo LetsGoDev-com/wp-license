@@ -58,6 +58,14 @@
 				LetsgoLicense.unlinkLicense(slug);
 			});
 
+			// Link the license from Letsgodev
+			$(document).on('click', '#letsgodev_button_link', function(e) {
+				e.preventDefault();
+				const slug = $(this).data('slug');
+
+				LetsgoLicense.linkLicense(slug);
+			});
+
 			// Check if exist some update
 			$(document).on('click', '#letsgodev_button_update', function(e) {
 				e.preventDefault();
@@ -116,9 +124,19 @@
 				$('#letsgodev_box_message').addClass(response.data.box_class);
 				$('#letsgodev_box_message').html(response.data.box_message);
 
-				if( response.success && response.data.is_active ) {
-					const box_button = '<button id="letsgodev_button_unlink" data-slug="' + slug + '">' + letsgo.unlink_text + '</button>',
-						box_update = '<button id="letsgodev_button_update" data-slug="' + slug + '" title="'+letsgo.update_text+'"><span class="dashicons dashicons-update"></span></button>';
+				if( response.success ) {
+
+					let box_button, box_update = '';
+
+					if( response.data.is_active ) {
+						box_button = '<button id="letsgodev_button_unlink" class="letsgodev_primary_button" data-slug="' + slug + '">' + letsgo.unlink_text + '</button>';
+						box_update = '<button id="letsgodev_button_update" class="letsgodev_secondary_button" data-slug="' + slug + '" title="'+letsgo.update_text+'"><span class="dashicons dashicons-update"></span></button>';
+					}
+					
+					if( response.data.is_unlink ) {
+						box_button = '<button id="letsgodev_button_link" class="letsgodev_primary_button" data-slug="' + slug + '">' + letsgo.link_text + '</button>';
+					}	
+					
 					$('#letsgodev_box_button').html(box_button + box_update );
 				}
 			};
@@ -170,12 +188,54 @@
 				$('#letsgodev_box_message').html(response.data.box_message);
 
 				if( response.success ) {
-					setTimeout(window.location.reload.bind(window.location), 300);
+					setTimeout(window.location.reload.bind(window.location), 800);
 				}
 			};
 
 			const onError = function(jqxhr, textStatus, error) {
 				console.log('License Ajax unlink error: ' + textStatus + ' - ' + error);
+			};
+
+			if( letsgo && letsgo.ajax_url ) {
+				LetsgoLicense.sendAjax(data, onSuccess, onError);
+			}
+		},
+
+		/**
+		 * Link License Event
+		 * 
+		 * @since 1.0.0
+		 */
+		linkLicense : function(slug = '') {
+			const loading = '<div style="text-align:center;">' + letsgo.loading_html + '</div>';
+
+			// Remove all the messages
+			$('#letsgodev_box_message').removeClass('error').removeClass('success').removeClass('warning').removeClass('info');
+			
+			// Put loading icon in message section
+			$('#letsgodev_box_message').html(loading);
+			
+			// Empty button content
+			$('#letsgodev_box_button').empty();
+
+			// We prepare the information to Ajax event
+			const data = {
+				action: slug + '_set_link',
+				wpnonce: letsgo.wpnonce
+			};
+
+			const onSuccess = function (response) {
+				
+				$('#letsgodev_box_message').addClass(response.data.box_class);
+				$('#letsgodev_box_message').html(response.data.box_message);
+
+				if( response.success ) {
+					setTimeout(window.location.reload.bind(window.location), 800);
+				}
+			};
+
+			const onError = function(jqxhr, textStatus, error) {
+				console.log('License Ajax link error: ' + textStatus + ' - ' + error);
 			};
 
 			if( letsgo && letsgo.ajax_url ) {

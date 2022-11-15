@@ -78,7 +78,7 @@
 	border-radius: .25rem;
 }
 
-#letsgodev_button_unlink {
+.letsgodev_primary_button {
 	color: #fff;
 	background-color: #c82333;
 	border-color: #bd2130;
@@ -99,7 +99,7 @@
 	margin: 1px;
 }
 
-#letsgodev_button_update {
+.letsgodev_secondary_button {
 	padding: 0.375rem 0.75rem;
 	display: inline-block;
 	font-weight: 400;

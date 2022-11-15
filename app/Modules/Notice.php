@@ -79,7 +79,7 @@ class Notice extends Module {
 
 
 		if( ! empty( $result['error'] ) ) {
-			$error = print_r( [
+			$error = \print_r( [
 				'error'	=> $result['error'],
 				'code'	=> $result['data']['code'] ?? '',
 			], true);
@@ -100,7 +100,7 @@ class Notice extends Module {
 		}
 
 		// Get License Info
-		$licensedates = get_option( $this->settings->slug . '_license_dates', [] );
+		$licensedates = \get_option( $this->settings->slug . '_license_dates', [] );
 
 		$name 	= $this->settings->name;
 		$expire = $licensedates['expire'] ?? '';
@@ -124,8 +124,8 @@ class Notice extends Module {
 		// Remove transient
 		\delete_transient( $this->settings->slug . '_license_activated' );
 
-		$loadingHtml 	= sprintf(
-			'<img src="%s" alt="loading" />', admin_url( 'images/spinner.gif' )
+		$loadingHtml 	= \sprintf(
+			'<img src="%s" alt="loading" />', \admin_url( 'images/spinner.gif' )
 		);
 
 		$name 			= $this->settings->name;
@@ -154,11 +154,11 @@ class Notice extends Module {
 		// Activating License
 		$isActivated = $this->api()->activate( $licenseKey );
 
-		// If it is activated
+		// This transient is for print a notice on the top window
 		if( $isActivated ) {
 			\set_transient(
-        		$this->settings->slug . '_license_activated', true, HOUR_IN_SECONDS
-        	);
+				$this->settings->slug . '_license_activated', true, HOUR_IN_SECONDS
+			);
 		}
 		
 		return $isActivated;
