@@ -118,7 +118,7 @@ class Upgrade extends Module {
 	 * @param  [type] $args
 	 * @return mixed
 	 */
-	public function pluginsAPICall( $def, $action = '', $args ) {
+	public function pluginsAPICall( bool $def, string $action, \stdClass $args ) {
 		
 		if ( ! is_object( $args ) || ! isset( $args->slug ) || $args->slug != $this->settings->slug ) {
 			return $def;
