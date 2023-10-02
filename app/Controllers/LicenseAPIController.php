@@ -380,7 +380,7 @@ Class LicenseAPIController {
 		}
 
 		// If Error
-		if( $body->status != 'success' ) {
+		if( $body->status !== 'success' ) {
 
 			$result = [
 				'error'	=> $body->message ?? '',
@@ -418,7 +418,6 @@ Class LicenseAPIController {
 			
 			Logger::message( $result, $this->settings->slug );
 
-			// IF success
 			return false;
 		}
 
@@ -426,22 +425,26 @@ Class LicenseAPIController {
 		// set "has license"
 		\set_transient( $this->settings->slug . '_has_license', 1, WEEK_IN_SECONDS );
 
-		// Check license status
-		if( $body->licence_status == 'active' ) {
 
-			// If there is info about the license date expire
-			if( isset( $body->licence_start ) && isset( $body->licence_expire ) ) {
-				\update_option( $this->settings->slug . '_license_dates', [
-					'start'		=> $body->licence_start,
-					'expire'	=> $body->licence_expire,
-				] );
-			}
+		// If there is info about the license date expire
+		if( ! empty( $body->licence_start ) && ! empty( $body->licence_expire ) ) {
+			\update_option( $this->settings->slug . '_license_dates', [
+				'start'		=> $body->licence_start,
+				'expire'	=> $body->licence_expire,
+			] );
+		}
+
+		// Check license status
+		if( isset( $body->licence_status ) && $body->licence_status === 'expired' ) {
+
+			// Expired
+			\set_transient( $this->settings->slug . '_license_expired', 1, WEEK_IN_SECONDS );
+		
+		} else {
 
 			// Remove license expired
 			\delete_transient( $this->settings->slug . '_license_expired' );
-		
-		} elseif( empty( $body->licence_expire ) ) {
-			\set_transient( $this->settings->slug . '_license_expired', 1, WEEK_IN_SECONDS );
+			
 		}
 
 		
