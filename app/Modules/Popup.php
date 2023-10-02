@@ -149,19 +149,26 @@ class Popup extends Module {
 
 				// License expire
 				$licenseDates = \get_option( $this->settings->slug . '_license_dates', [] );
-				$expire = $result['data']['expire'] ?: ( $licenseDates['expire'] ?? '' );
+				$expire       = $result['data']['expire'] ?: ( $licenseDates['expire'] ?? '' );
+				$expireLabel  = \esc_html__( 'Expire', 'letsgodev' );
 
-				$box_message = sprintf(
-					'%s <br /> %s',
+
+				if ( ! empty( $expire ) && \strtotime( $expire ) < \strtotime( 'now' ) ) {
+					$expireLabel = \esc_html__( 'Expired', 'letsgodev' );
+				}
+
+				$boxMessage = \sprintf(
+					'%s <br /> %s: %s',
 					\esc_html__( 'The license key is active to this domain', 'letsgodev' ),
-					sprintf( \esc_html__( 'Expire: %s', 'letsgodev'), $expire )
+					$expireLabel,
+					$expire
 				);
 
 				$return = [
 					'is_active'		=> 1,
 					'is_unlink'		=> 0,
 					'box_class'		=> 'success',
-					'box_message'	=> $box_message,
+					'box_message'	=> $boxMessage,
 				];
 
 				break;

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Letsgodev License\n"
-"POT-Creation-Date: 2022-11-15 01:16-0300\n"
-"PO-Revision-Date: 2022-11-15 01:16-0300\n"
+"POT-Creation-Date: 2023-10-02 05:28-0300\n"
+"PO-Revision-Date: 2023-10-02 05:28-0300\n"
 "Last-Translator: \n"
 "Language-Team: Letsgodev\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SearchPath-1: app\n"
 
 #: app/Controllers/LicenseAPIController.php:83
-#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:234
+#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:241
 msgid "The license is missing"
 msgstr "No hay licencia"
 
@@ -65,36 +65,39 @@ msgstr "Vincular este dominio"
 msgid "Check updates"
 msgstr "Revisar actualizaciones"
 
-#: app/Modules/Popup.php:156
+#: app/Modules/Popup.php:153
+msgid "Expire"
+msgstr "Expira"
+
+#: app/Modules/Popup.php:157
+msgid "Expired"
+msgstr "Expiró"
+
+#: app/Modules/Popup.php:162
 msgid "The license key is active to this domain"
 msgstr "La licencia está activada para este dominio"
 
-#: app/Modules/Popup.php:157
-#, php-format
-msgid "Expire: %s"
-msgstr "Expira: %s"
-
-#: app/Modules/Popup.php:175
+#: app/Modules/Popup.php:182
 msgid "The license key is unlinked. Please link it."
 msgstr "La licencia está desvinculada. Por favor vincularla."
 
-#: app/Modules/Popup.php:184
+#: app/Modules/Popup.php:191
 msgid "Error in the License."
 msgstr "Error en la licencia."
 
-#: app/Modules/Popup.php:216
+#: app/Modules/Popup.php:223
 msgid "The license key was successfully unlinked"
 msgstr "La licencia fue satisfactoriamente desvinculada"
 
-#: app/Modules/Popup.php:274
+#: app/Modules/Popup.php:281
 msgid "The license key was successfully linked"
 msgstr "La licencia fue vinculada con éxito"
 
-#: app/Modules/Popup.php:311
+#: app/Modules/Popup.php:318
 msgid "No update available"
 msgstr "No hay actualizaciones disponibles"
 
-#: app/Modules/Popup.php:323
+#: app/Modules/Popup.php:330
 msgid "Update available! Refreshing page..."
 msgstr "Actualización disponible. Actualizando página..."
 
