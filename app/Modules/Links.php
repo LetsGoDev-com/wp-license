@@ -60,6 +60,6 @@ class Links extends Module {
 			),
 		];
 
-		return array_merge( $links, $newLinks );
+		return \array_merge( $links, $newLinks );
 	}
 }

@@ -80,7 +80,7 @@ Class LicenseAPIController {
 		if( empty( $licenseKey ) ) {
 			
 			$result = [
-				'error'	=> esc_html__( 'The license is missing', 'letsgodev' ),
+				'error'	=> \esc_html__( 'The license is missing', 'letsgodev' ),
 				'data'	=> [
 					'method'	=> 'checkLicense',
 				]
@@ -292,7 +292,7 @@ Class LicenseAPIController {
 		];
 
 		// URL
-		$request_uri = $this->settings->api_url . '?' . http_build_query( $params , '', '&' );
+		$request_uri = $this->settings->api_url . '?' . \http_build_query( $params , '', '&' );
 		
 		// Get response
 		$response = \wp_remote_get( $request_uri, [

@@ -44,7 +44,7 @@ class Upgrade extends Module {
 	 */
 	function checkUpdate( $checkedData ) {
 		
-		if ( ! is_object( $checkedData ) || ! isset ( $checkedData->response ) ) {
+		if ( ! \is_object( $checkedData ) || ! isset ( $checkedData->response ) ) {
 			return $checkedData;
 		}
 
@@ -59,25 +59,25 @@ class Upgrade extends Module {
 			return $checkedData;
 		}
 
-		$responseBlock = json_decode( $result[ 'data' ][ 'body' ] );
+		$responseBlock = \json_decode( $result[ 'data' ][ 'body' ] );
  
-		if( ! is_array( $responseBlock ) || count( $responseBlock ) < 1 ) {
+		if( ! \is_array( $responseBlock ) || \count( $responseBlock ) < 1 ) {
 			return $checkedData;
 		}
 
 		//retrieve the last message within the $responseBlock
-		$responseBlock = $responseBlock[ count($responseBlock) - 1 ];
+		$responseBlock = $responseBlock[ \count($responseBlock) - 1 ];
 
 		$responsePlugin = isset( $responseBlock->message ) ? $responseBlock->message : '';
 
 		// Feed the update data into WP update
-		if( is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
+		if( \is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
 
 			// When it is code_version in sl_action
 			if( ! isset( $responsePlugin->new_version ) && isset( $responsePlugin->version ) ) {
 
 				// If it is no a new version
-				if( version_compare( $responsePlugin->version, $this->settings->version, '<=' ) ) {
+				if( \version_compare( $responsePlugin->version, $this->settings->version, '<=' ) ) {
 					return $checkedData;
 				}
 
@@ -120,7 +120,7 @@ class Upgrade extends Module {
 	 */
 	public function pluginsAPICall( bool $def, string $action, \stdClass $args ) {
 		
-		if ( ! is_object( $args ) || ! isset( $args->slug ) || $args->slug != $this->settings->slug ) {
+		if ( ! \is_object( $args ) || ! isset( $args->slug ) || $args->slug != $this->settings->slug ) {
 			return $def;
 		}
 
@@ -132,17 +132,17 @@ class Upgrade extends Module {
 
 		// If error
 		if( ! $isInfo ) {
-			return new WP_Error('plugins_api_failed', \esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. \esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
+			return new \WP_Error('plugins_api_failed', \esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. \esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
 		}
 
-		$responseBlock = json_decode( $result[ 'data' ][ 'body' ] );
+		$responseBlock = \json_decode( $result[ 'data' ][ 'body' ] );
 		
 		//retrieve the last message within the $responseBlock
-		$responseBlock = $responseBlock[ count($responseBlock) - 1 ];
+		$responseBlock = $responseBlock[ \count($responseBlock) - 1 ];
 		$responsePlugin = $responseBlock->message;
 
 		// Feed the update data into WP updater
-		if( is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
+		if( \is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
 			
 			//include slug and plugin data
 			$responsePlugin->slug     = $this->settings->slug;

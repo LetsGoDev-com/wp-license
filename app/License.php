@@ -43,13 +43,13 @@ class License {
 		// Plugin Info
 		$this->settings->name 	= $data['name'] ?? '';
 		$this->settings->plugin = $data['plugin'] ?? '';
-		$this->settings->slug 	= dirname( $this->settings->plugin );
+		$this->settings->slug 	= \dirname( $this->settings->plugin );
 		$this->settings->doc 	= $data['doc'] ?? '';
 
 		// Plugin Path
-		$this->settings->dir 	= trailingslashit( plugin_dir_path(__DIR__) );
-		$this->settings->url 	= trailingslashit( plugin_dir_url( __DIR__ ) );
-		$this->settings->base 	= trailingslashit( dirname( plugin_basename( __DIR__ ) ) );
+		$this->settings->dir 	= \trailingslashit( \plugin_dir_path(__DIR__) );
+		$this->settings->url 	= \trailingslashit( \plugin_dir_url( __DIR__ ) );
+		$this->settings->base 	= \trailingslashit( \dirname( plugin_basename( __DIR__ ) ) );
 
 		// Api Info
 		$this->settings->api_url 	= $data['api_url'] ?? '';
@@ -79,14 +79,14 @@ class License {
 	 * Cloning is forbidden.
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
+		\_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
 	}
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
+		\_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'letsgodev' ), '2.1' );
 	}
 
 

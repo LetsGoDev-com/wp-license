@@ -24,27 +24,27 @@ class Popup extends Module {
 	public function iniHooks() {
 		
 		// Plugin Info Links
-		$linksHook = sprintf( 'plugin_action_links_%s', $this->settings->plugin );
-		add_filter( $linksHook, [ $this, 'pluginInfo' ], 11 );
+		$linksHook = \sprintf( 'plugin_action_links_%s', $this->settings->plugin );
+		\add_filter( $linksHook, [ $this, 'pluginInfo' ], 11 );
 
 		// Enqueue scripts for admin
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts'] );
+		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts'] );
 
 		// Ajax
-		$getStatusHook = sprintf( 'wp_ajax_%s_get_status', $this->settings->slug );
-		add_action( $getStatusHook, [ $this, 'ajaxStatus' ] );
+		$getStatusHook = \sprintf( 'wp_ajax_%s_get_status', $this->settings->slug );
+		\add_action( $getStatusHook, [ $this, 'ajaxStatus' ] );
 
-		$unlinkHook = sprintf( 'wp_ajax_%s_set_unlink', $this->settings->slug );
-		add_action( $unlinkHook, [ $this, 'ajaxUnlink'] );
+		$unlinkHook = \sprintf( 'wp_ajax_%s_set_unlink', $this->settings->slug );
+		\add_action( $unlinkHook, [ $this, 'ajaxUnlink'] );
 
-		$linkHook = sprintf( 'wp_ajax_%s_set_link', $this->settings->slug );
-		add_action( $linkHook, [ $this, 'ajaxLink'] );
+		$linkHook = \sprintf( 'wp_ajax_%s_set_link', $this->settings->slug );
+		\add_action( $linkHook, [ $this, 'ajaxLink'] );
 
-		$getUpdateHook = sprintf( 'wp_ajax_%s_get_update', $this->settings->slug );
-		add_action( $getUpdateHook, [ $this, 'ajaxUpdate' ] );
+		$getUpdateHook = \sprintf( 'wp_ajax_%s_get_update', $this->settings->slug );
+		\add_action( $getUpdateHook, [ $this, 'ajaxUpdate' ] );
 
 		// Print the popup
-		add_action( 'admin_footer', [ $this, 'printPopup' ], 1 );
+		\add_action( 'admin_footer', [ $this, 'printPopup' ], 1 );
 	}
 
 	/**
@@ -102,10 +102,10 @@ class Popup extends Module {
 		\wp_enqueue_script( 'letsgodev-license-popup-js' );
 		\wp_enqueue_style( 'letsgodev-license-popup-css' );
 
-		$loading_icon = \admin_url( 'images/spinner-2x.gif' );
+		$loadingIcon = \admin_url( 'images/spinner-2x.gif' );
 
 		$data = [
-			'loading_html'	=> sprintf( '<img src="%s" alt="loading" />', $loading_icon ),
+			'loading_html'	=> \sprintf( '<img src="%s" alt="loading" />', $loadingIcon ),
 			'ajax_url'		=> \admin_url( 'admin-ajax.php' ),
 			'wpnonce'		=> \wp_create_nonce( 'letsgodev-wpnonce' ),
 			'unlink_text'	=> \esc_html__( 'Unlink from this website', 'letsgodev' ),
@@ -150,12 +150,7 @@ class Popup extends Module {
 				// License expire
 				$licenseDates = \get_option( $this->settings->slug . '_license_dates', [] );
 				$expire       = $result['data']['expire'] ?: ( $licenseDates['expire'] ?? '' );
-				$expireLabel  = \esc_html__( 'Expire', 'letsgodev' );
-
-
-				if ( ! empty( $expire ) && \strtotime( $expire ) < \strtotime( 'now' ) ) {
-					$expireLabel = \esc_html__( 'Expired', 'letsgodev' );
-				}
+				$expireLabel  = $this->api()->isExpired() ? \esc_html__( 'Expired', 'letsgodev' ) : \esc_html__( 'Expire', 'letsgodev' );
 
 				$boxMessage = \sprintf(
 					'%s <br /> %s: %s',
@@ -247,7 +242,7 @@ class Popup extends Module {
 			// Logger
 			Logger::message( $result, $this->settings->slug );
 
-			wp_send_json_error( [
+			\wp_send_json_error( [
 				'box_class'		=> 'error',
 				'box_message'	=> $result['error'] ?? '',
 			] );
@@ -308,7 +303,7 @@ class Popup extends Module {
 			\wp_send_json_error( $return );
 		}
 
-		$responseBody = json_decode( $result[ 'data' ][ 'body' ] );
+		$responseBody = \json_decode( $result[ 'data' ][ 'body' ] );
 		
 		// If is no update
 		if( empty( $responseBody ) ) {
