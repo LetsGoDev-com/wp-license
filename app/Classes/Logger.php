@@ -18,28 +18,28 @@ class Logger {
 	 * @access   public
 	 * @return   void
 	 */
-	public static function message( array|string $message, string $slug ) {
+	public static function message( $message, string $slug ) {
 
 		// Save to Log File
-		if( ! \apply_filters( wp_normalize_path( __CLASS__ ) . '/enable', false ) ) {
+		if( ! \apply_filters( \wp_normalize_path( __CLASS__ ) . '/enable', false ) ) {
 			return;
 		}
 
 		self::createDir();
 
-		$date = sprintf( '[ %s ]', date('d-M-Y H:i:s e') );
+		$date = \sprintf( '[ %s ]', \date('d-M-Y H:i:s e') );
 
-		error_log( "--------------- Begin of Message ---------------" . "\n", 3, self::destination( $slug ) );
+		\error_log( "--------------- Begin of Message ---------------" . "\n", 3, self::destination( $slug ) );
 
-		if ( is_array( $message ) || is_object( $message ) ) {
-			error_log( $date . print_r( $message, true ), 3, self::destination( $slug )  );
+		if ( \is_array( $message ) || \is_object( $message ) ) {
+			\error_log( $date . \print_r( $message, true ), 3, self::destination( $slug )  );
 
 		} else {
-			error_log( $date . $message . "\n", 3, self::destination( $slug ) );
+			\error_log( $date . $message . "\n", 3, self::destination( $slug ) );
 		}
 
 
-		error_log( "--------------- End of Message ---------------" . "\n", 3, self::destination( $slug ) );
+		\error_log( "--------------- End of Message ---------------" . "\n", 3, self::destination( $slug ) );
 	}
 
 
@@ -52,8 +52,8 @@ class Logger {
 	 */
 	private static function createDir() {
 	
-		if ( ! is_dir( self::dir() ) ) {
-			mkdir( self::dir() );
+		if ( ! \is_dir( self::dir() ) ) {
+			\mkdir( self::dir() );
 		}
 	}
 
@@ -76,16 +76,12 @@ class Logger {
      * @return   string
      */
     private static function destination( string $slug ) {
-        $file = sprintf(
+        $file = \sprintf(
         	'debug_%s_%s.log',
-        	str_replace( '-', '_', $slug ),
-        	date( 'Y_m_d' )
+        	\str_replace( '-', '_', $slug ),
+        	\date( 'Y_m_d' )
         );
 
         return self::dir() . $file;
     }
-
-
-
-    
 }

@@ -311,7 +311,7 @@ Class LicenseAPIController {
 	 * @param  bool|boolean $isDownServer
 	 * @return array
 	 */
-	private function processResponse( array $response, array $allowedCodes = [], bool $isDownServer = false ) {
+	private function processResponse( $response, array $allowedCodes = [], bool $isDownServer = false ) {
 
 		// If server is down
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
