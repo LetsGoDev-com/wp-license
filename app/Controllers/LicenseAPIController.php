@@ -317,7 +317,7 @@ Class LicenseAPIController {
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
 			$result = [
-				'error'		=> \esc_html__( 'Server is down right', 'letsgodev' ),
+				'error'		=> \esc_html__( 'The license server is down right or your hosting provider may be blocking it', 'letsgodev' ),
 				'data'		=> [
 					'method'	=> 'processResponse',
 					'response'	=> $response->get_error_message(),

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Letsgodev License\n"
-"POT-Creation-Date: 2023-10-02 05:28-0300\n"
-"PO-Revision-Date: 2023-10-02 05:28-0300\n"
+"POT-Creation-Date: 2023-10-26 12:55-0300\n"
+"PO-Revision-Date: 2023-10-26 12:56-0300\n"
 "Last-Translator: \n"
 "Language-Team: Letsgodev\n"
 "Language: es\n"
@@ -17,13 +17,13 @@ msgstr ""
 "X-Poedit-SearchPath-1: app\n"
 
 #: app/Controllers/LicenseAPIController.php:83
-#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:241
+#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:236
 msgid "The license is missing"
 msgstr "No hay licencia"
 
 #: app/Controllers/LicenseAPIController.php:320
-msgid "Server is down right"
-msgstr "Letsgodev está caído"
+msgid "The license server is down right or your hosting provider may be blocking it"
+msgstr "El servidor de licencias esta caído o su proveedor de hosting puede estar bloqueandolo"
 
 #: app/Controllers/LicenseAPIController.php:361
 msgid "There was a problem establishing a connection to the API server"
@@ -66,38 +66,38 @@ msgid "Check updates"
 msgstr "Revisar actualizaciones"
 
 #: app/Modules/Popup.php:153
+msgid "Expired"
+msgstr "Expiró"
+
+#: app/Modules/Popup.php:153
 msgid "Expire"
 msgstr "Expira"
 
 #: app/Modules/Popup.php:157
-msgid "Expired"
-msgstr "Expiró"
-
-#: app/Modules/Popup.php:162
 msgid "The license key is active to this domain"
 msgstr "La licencia está activada para este dominio"
 
-#: app/Modules/Popup.php:182
+#: app/Modules/Popup.php:177
 msgid "The license key is unlinked. Please link it."
 msgstr "La licencia está desvinculada. Por favor vincularla."
 
-#: app/Modules/Popup.php:191
+#: app/Modules/Popup.php:186
 msgid "Error in the License."
 msgstr "Error en la licencia."
 
-#: app/Modules/Popup.php:223
+#: app/Modules/Popup.php:218
 msgid "The license key was successfully unlinked"
 msgstr "La licencia fue satisfactoriamente desvinculada"
 
-#: app/Modules/Popup.php:281
+#: app/Modules/Popup.php:276
 msgid "The license key was successfully linked"
 msgstr "La licencia fue vinculada con éxito"
 
-#: app/Modules/Popup.php:318
+#: app/Modules/Popup.php:313
 msgid "No update available"
 msgstr "No hay actualizaciones disponibles"
 
-#: app/Modules/Popup.php:330
+#: app/Modules/Popup.php:325
 msgid "Update available! Refreshing page..."
 msgstr "Actualización disponible. Actualizando página..."
 
@@ -149,6 +149,9 @@ msgstr "Cerrar Popup"
 #: resources/views/popup.php:3
 msgid "License Status"
 msgstr "Estado de la licencia"
+
+#~ msgid "Server is down right"
+#~ msgstr "Letsgodev está caído"
 
 #~ msgid "Wrong information"
 #~ msgstr "Mala información"

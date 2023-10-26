@@ -135,9 +135,9 @@ class Popup extends Module {
 
 		if( ! $isChecked ) {
 			\wp_send_json_error( [
-				'isactive'	=> 0,
-				'class'		=> 'error',
-				'message'	=> $result['error'] ?? '',
+				'isactive'	  => 0,
+				'box_class'	  => 'error',
+				'box_message' => $result['error'] ?? '',
 			] );
 		}
 
