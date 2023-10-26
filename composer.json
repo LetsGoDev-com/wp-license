@@ -1,6 +1,7 @@
 {
 	"name": "letsgodev/wp-license",
 	"type": "wordpress-plugin",
+	"version": "2.0.0",
 	"license": "MIT",
 	"description": "LetsGoDev License",
 	"authors": [
