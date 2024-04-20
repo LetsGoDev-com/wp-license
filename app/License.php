@@ -14,13 +14,12 @@ namespace LetsGoDev\Core;
  */
 class License {
 
-	protected $slug;
-	protected $plugin;
-	protected $name;
 
-	protected $dir;
-	protected $url;
-	protected $base;
+	/**
+	 * Settings
+	 * @var \sdtClass
+	 */
+	protected $settings;
 	
 	public $api;
 

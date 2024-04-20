@@ -17,6 +17,12 @@ use LetsGoDev\Classes\Logger;
 Class LicenseAPIController {
 
 	/**
+	 * Settings
+	 * @var \sdtClass
+	 */
+	protected $settings;
+
+	/**
 	 * Results for each API call
 	 * @var array
 	 */
