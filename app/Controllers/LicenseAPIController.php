@@ -185,7 +185,7 @@ Class LicenseAPIController {
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
 			$result = [
-				'error'	=> $response->get_error_message(),
+				'error'	=> \wp_remote_retrieve_response_message( $response ),
 				'data'	=> [
 					'method'	=> 'checkUpdate',
 				]
