@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Letsgodev License\n"
+"POT-Creation-Date: 2023-10-26 12:55-0300\n"
+"PO-Revision-Date: 2023-10-26 12:56-0300\n"
+"Last-Translator: \n"
+"Language-Team: Letsgodev\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e\n"
+"X-Poedit-SearchPath-0: resources\n"
+"X-Poedit-SearchPath-1: app\n"
+
+#: app/Controllers/LicenseAPIController.php:83
+#: app/Controllers/LicenseAPIController.php:241 app/Modules/Popup.php:236
+msgid "The license is missing"
+msgstr "No hay licencia"
+
+#: app/Controllers/LicenseAPIController.php:320
+msgid "The license server is down right or your hosting provider may be blocking it"
+msgstr "El servidor de licencias esta caído o su proveedor de hosting puede estar bloqueandolo"
+
+#: app/Controllers/LicenseAPIController.php:361
+msgid "There was a problem establishing a connection to the API server"
+msgstr "Hubo un problema  estableciendo una conexión con el servidor API"
+
+#: app/Controllers/LicenseAPIController.php:409
+msgid "Status Code no allowed"
+msgstr "Código de estado no permitido"
+
+#: app/License.php:82 app/License.php:89
+msgid "Cheatin&#8217; huh?"
+msgstr "Cheatin&#8217; huh?"
+
+#: app/Modules/Links.php:47
+msgid "Documentation"
+msgstr "Documentación"
+
+#: app/Modules/Links.php:53
+msgid "Support"
+msgstr "Soporte"
+
+#: app/Modules/Links.php:59
+msgid "More Premiun Plugins"
+msgstr "Más Plugins Premium"
+
+#: app/Modules/Popup.php:70
+msgid "Manager Licenses"
+msgstr "Administrar Licencias"
+
+#: app/Modules/Popup.php:111
+msgid "Unlink from this website"
+msgstr "Desvincular desde este dominio"
+
+#: app/Modules/Popup.php:112
+msgid "Link this website"
+msgstr "Vincular este dominio"
+
+#: app/Modules/Popup.php:113
+msgid "Check updates"
+msgstr "Revisar actualizaciones"
+
+#: app/Modules/Popup.php:153
+msgid "Expired"
+msgstr "Expiró"
+
+#: app/Modules/Popup.php:153
+msgid "Expire"
+msgstr "Expira"
+
+#: app/Modules/Popup.php:157
+msgid "The license key is active to this domain"
+msgstr "La licencia está activada para este dominio"
+
+#: app/Modules/Popup.php:177
+msgid "The license key is unlinked. Please link it."
+msgstr "La licencia está desvinculada. Por favor vincularla."
+
+#: app/Modules/Popup.php:186
+msgid "Error in the License."
+msgstr "Error en la licencia."
+
+#: app/Modules/Popup.php:218
+msgid "The license key was successfully unlinked"
+msgstr "La licencia fue satisfactoriamente desvinculada"
+
+#: app/Modules/Popup.php:276
+msgid "The license key was successfully linked"
+msgstr "La licencia fue vinculada con éxito"
+
+#: app/Modules/Popup.php:313
+msgid "No update available"
+msgstr "No hay actualizaciones disponibles"
+
+#: app/Modules/Popup.php:325
+msgid "Update available! Refreshing page..."
+msgstr "Actualización disponible. Actualizando página..."
+
+#: app/Modules/Upgrade.php:135
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "Un inesperado error HTTP ocurrió durante la respuesta de la API."
+
+#: app/Modules/Upgrade.php:135
+msgid "Try again"
+msgstr "Intenta otra vez"
+
+#: resources/views/license-activated.php:6
+msgid "Plugin activated and ready to use."
+msgstr "Plugin activado y listo para usar."
+
+#: resources/views/license-activated.php:7
+msgid "Redirecting..."
+msgstr "Redireccionando..."
+
+#: resources/views/license-box.php:6
+msgid "Please enter your license code"
+msgstr "Por favor ingresa tu código de licencia"
+
+#: resources/views/license-box.php:16
+msgid "License Code"
+msgstr "Código de Licencia"
+
+#: resources/views/license-box.php:18
+msgid "Submit"
+msgstr "Envíar"
+
+#: resources/views/license-box.php:22 resources/views/popup.php:12
+msgid "Where do I find my License Code?"
+msgstr "Dónde encuentro mi código de licencia?"
+
+#: resources/views/license-box.php:23 resources/views/popup.php:16
+msgid "Manager License from your site"
+msgstr "Administrar licencia desde tu sitio"
+
+#: resources/views/license-expired.php:7
+#, php-format
+msgid "Your license expired on %s, please go to %s to renew it"
+msgstr "Tu licencia expiró el %s, por favor ir a %s para renovarlo"
+
+#: resources/views/popup.php:2
+msgid "Close Popup"
+msgstr "Cerrar Popup"
+
+#: resources/views/popup.php:3
+msgid "License Status"
+msgstr "Estado de la licencia"
+
+#~ msgid "Server is down right"
+#~ msgstr "Letsgodev está caído"
+
+#~ msgid "Wrong information"
+#~ msgstr "Mala información"
+
+#~ msgid "There was a problem checking the license"
+#~ msgstr "Hubo un problema revisando la licencia"
+
+#~ msgid "Server is down right. An email was sent to "
+#~ msgstr "Servidor está caído. Un email fue enviado a "
+
+#, php-format
+#~ msgid "Letsgodev is down right (from %s) - Activating"
+#~ msgstr "Letsgodev está caído ( from %s ) - Activando"
+
+#~ msgid "There was a problem activating the license"
+#~ msgstr "Hubo un problema activando la licencia"
+
+#~ msgid "An error occour when try to identify the plugin."
+#~ msgstr "Un error ocurrió cuando se intentaba identificar el plugin."
+
+#~ msgid "Licence key is missing"
+#~ msgstr "No hay licencia"
+
+#~ msgid "There was a problem checking the license. This license does not correspond to this website."
+#~ msgstr "Hubo un problema revisando la licencia. Esta licencia no corresponde a esta website."

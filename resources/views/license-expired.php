@@ -4,7 +4,8 @@
 			'<b>%s</b> : %s',
 			ucwords( $name ),
 			sprintf(
-				esc_html__( 'Your license expired, please go to %s to renew it', 'letsgodev' ),
+				esc_html__( 'Your license expired on %s, please go to %s to renew it', 'letsgodev' ),
+				$expire,
 				'<a href="https://www.letsgodev.com" target="_blank">https://www.letsgodev.com</a>'
 			)
 		);
