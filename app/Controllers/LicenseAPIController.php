@@ -41,20 +41,20 @@ Class LicenseAPIController {
 	 * Check if it has license and link it.
 	 * @return boolean
 	 */
-	public function hasLicense() {
+	public function hasLicense(): bool {
 
 		$hasLicense	= \get_transient( $this->settings->slug . '_has_license' );
 		$licenseKey = \get_option( $this->settings->slug . '_license', '' );
 
 		// If empty license key
-		if( empty( $licenseKey ) ) {
+		if ( empty( $licenseKey ) ) {
 			\delete_transient( $this->settings->slug . '_has_license');
 			\delete_transient( $this->settings->slug . '_license_expired' );
 			return false;
 		}
 
 		// If the transient variable still recorded
-		if( ! empty( $hasLicense ) ) {
+		if ( ! empty( $hasLicense ) ) {
 			return true;
 		}
 
@@ -65,7 +65,7 @@ Class LicenseAPIController {
 		$isSuccess = $this->processResponse( $response, [ 's205', 's215' ], true );
 
 		// If false, remove license
-		if( ! $isSuccess ) {
+		if ( ! $isSuccess ) {
 			\delete_option( $this->settings->slug . '_license' );
 			\delete_transient( $this->settings->slug . '_license_expired' );
 		}
@@ -78,7 +78,7 @@ Class LicenseAPIController {
 	 * CheckLicense
 	 * @return mixed
 	 */
-	public function checkLicense() {
+	public function checkLicense(): bool {
 
 		// Check License
 		$licenseKey = \get_option( $this->settings->slug . '_license', '' );
@@ -113,7 +113,7 @@ Class LicenseAPIController {
 	 * Check is the license is active
 	 * @return boolean
 	 */
-	public function isActive() {
+	public function isActive(): bool {
 		return $this->hasLicense() && ! \get_transient( $this->settings->slug . '_license_expired' );
 	}
 
@@ -122,7 +122,7 @@ Class LicenseAPIController {
 	 * Check if the license expired
 	 * @return boolean
 	 */
-	public function isExpired() {
+	public function isExpired(): bool {
 		return \get_transient( $this->settings->slug . '_license_expired' );
 	}
 
@@ -131,7 +131,7 @@ Class LicenseAPIController {
 	 * Get plugim imnformation
 	 * @return array
 	 */
-	public function getInfo() {
+	public function setInfo(): void {
 		
 		// Process the request to get info
 		$response = $this->processRequest( 'plugin_information' );
@@ -140,9 +140,9 @@ Class LicenseAPIController {
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
 
 			$result = [
-				'error'	=> $response->get_error_message(),
-				'data'	=> [
-					'method'	=> 'getInfo',
+				'error' => wp_remote_retrieve_response_message( $response ),
+				'data'  => [
+					'method' => 'getInfo',
 				]
 			];
 
@@ -151,8 +151,8 @@ Class LicenseAPIController {
 
 			// Logger
 			Logger::message( $result, $this->settings->slug );
-
-			return false;
+			
+			return;
 		}
 
 		self::$result[ $this->settings->slug ] = [
@@ -161,8 +161,6 @@ Class LicenseAPIController {
 				'body'	=> \wp_remote_retrieve_body( $response )
 			]
 		];
-
-		return true;
 	}
 
 
@@ -315,9 +313,9 @@ Class LicenseAPIController {
 	 * @param  array        $response
 	 * @param  array        $allowedCodes
 	 * @param  bool|boolean $isDownServer
-	 * @return array
+	 * @return bool
 	 */
-	private function processResponse( $response, array $allowedCodes = [], bool $isDownServer = false ) {
+	private function processResponse( $response, array $allowedCodes = [], bool $isDownServer = false ): bool {
 
 		// If server is down
 		if( \wp_remote_retrieve_response_code( $response ) !== 200 ) {
@@ -326,7 +324,7 @@ Class LicenseAPIController {
 				'error'		=> \esc_html__( 'The license server is down right or your hosting provider may be blocking it', 'letsgodev' ),
 				'data'		=> [
 					'method'	=> 'processResponse',
-					'response'	=> $response->get_error_message(),
+					'response'	=> wp_remote_retrieve_response_message( $response ),
 					'api_url'	=> $this->settings->api_url,
 					'product'	=> $this->settings->product,
 					'domain'	=> $this->settings->domain,
@@ -469,13 +467,14 @@ Class LicenseAPIController {
 		
 		return true;
 	}
-
-
+	
+	
 	/**
 	 * Get Results from API Call
+	 * @param string $slug
 	 * @return array
 	 */
-	public function getLastResult( string $slug ) {
+	public function getLastResult( string $slug ): array {
 		return self::$result[ $slug ] ?? [];
 	}
 }

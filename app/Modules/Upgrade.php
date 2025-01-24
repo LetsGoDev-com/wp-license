@@ -17,9 +17,9 @@ class Upgrade extends Module {
 
 	/**
 	 * Init Hook
-	 * @return mixed
+	 * @return void
 	 */
-	public function iniHooks() {
+	public function iniHooks(): void {
 		\add_action( 'after_setup_theme', [ $this, 'upgradePlugin' ] );
 	}
 
@@ -28,7 +28,7 @@ class Upgrade extends Module {
 	 * Upgrade plugin
 	 * @return mixed
 	 */
-	public function upgradePlugin() {
+	public function upgradePlugin(): void {
 		// Take over the update check
 		\add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'checkUpdate'] );
 
@@ -66,9 +66,8 @@ class Upgrade extends Module {
 		}
 
 		//retrieve the last message within the $responseBlock
-		$responseBlock = $responseBlock[ \count($responseBlock) - 1 ];
-
-		$responsePlugin = isset( $responseBlock->message ) ? $responseBlock->message : '';
+		$responseBlock  = $responseBlock[ \count($responseBlock) - 1 ];
+		$responsePlugin = $responseBlock->message ?? '';
 
 		// Feed the update data into WP update
 		if( \is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
@@ -85,22 +84,22 @@ class Upgrade extends Module {
 			}
 
 			//include slug and plugin data
-			$responsePlugin->slug = $this->settings->slug;
+			$responsePlugin->slug   = $this->settings->slug;
 			$responsePlugin->plugin = $this->settings->plugin;
-			$responsePlugin->url = $responsePlugin->homepage;
+			$responsePlugin->url    = $responsePlugin->homepage;
 
 			//if sections are being set
-			if( isset( $responsePlugin->sections ) ) {
+			if ( isset( $responsePlugin->sections ) ) {
 				$responsePlugin->sections = (array)$responsePlugin->sections;
 			}
 
 			//if banners are being set
-			if( isset( $responsePlugin->banners ) ) {
+			if ( isset( $responsePlugin->banners ) ) {
 				$responsePlugin->banners = (array)$responsePlugin->banners;
 			}
 
 			//if icons being set, convert to array
-			if( isset( $responsePlugin->icons ) ) {
+			if ( isset( $responsePlugin->icons ) ) {
 				$responsePlugin->icons = (array)$responsePlugin->icons;
 			}
 
@@ -125,13 +124,13 @@ class Upgrade extends Module {
 		}
 
 		// Plugin_information from the API
-		$isInfo = $this->api()->getInfo();
+		$this->api()->setInfo();
 
 		// Get Results
 		$result = $this->api()->getLastResult( $this->settings->slug );
 
 		// If error
-		if( ! $isInfo ) {
+		if( empty( $result ) ) {
 			return new \WP_Error('plugins_api_failed', \esc_html__('An Unexpected HTTP Error occurred during the API request.' , 'letsgodev') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. \esc_html__( 'Try again', 'letsgodev' ) .'&lt;/a>', $result[ 'error' ]);
 		}
 
