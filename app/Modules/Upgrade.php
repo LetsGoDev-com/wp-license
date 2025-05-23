@@ -70,7 +70,7 @@ class Upgrade extends Module {
 		$responsePlugin = $responseBlock->message ?? '';
 
 		// Feed the update data into WP update
-		if( \is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
+		if( \is_object( $responsePlugin ) && ! empty( (array)$responsePlugin ) ) {
 
 			// When it is code_version in sl_action
 			if( ! isset( $responsePlugin->new_version ) && isset( $responsePlugin->version ) ) {
