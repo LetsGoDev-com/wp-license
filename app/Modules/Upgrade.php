@@ -141,7 +141,7 @@ class Upgrade extends Module {
 		$responsePlugin = $responseBlock->message;
 
 		// Feed the update data into WP updater
-		if( \is_object( $responsePlugin ) && ! empty( $responsePlugin ) ) {
+		if( \is_object( $responsePlugin ) && ! empty( (array) $responsePlugin ) ) {
 			
 			//include slug and plugin data
 			$responsePlugin->slug     = $this->settings->slug;
